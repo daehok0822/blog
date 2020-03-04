@@ -255,6 +255,7 @@ return [
         ['header' => 'articles'],
         [
             'text'       => '글생성',
+            'url'  => '/create',
             'icon_color' => 'blue',
         ],
         [
