@@ -252,6 +252,19 @@ return [
             'text'       => 'information',
             'icon_color' => 'aqua',
         ],
+        ['header' => 'articles'],
+        [
+            'text'       => '글생성',
+            'icon_color' => 'blue',
+        ],
+        [
+            'text'       => '글수정',
+            'icon_color' => 'green',
+        ],
+        [
+            'text'       => '글삭제',
+            'icon_color' => 'red',
+        ],
     ],
 
     /*
