@@ -11,9 +11,11 @@ class ArticleController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
         //
+        $searchWord = $request->input('searchWord');
+        $articles = Article::with('user')->articleSearch($searchWord)->orderBy('id', 'DESC')->paginate(20);
     }
 
     /**
@@ -23,8 +25,8 @@ class ArticleController extends Controller
      */
     public function create()
     {
-        $categories1 = \App\Category::all();
-        return view('/article/create', ['categories1' => $categories1]);
+        $categories = \App\Category::all();
+        return view('/create', compact('categories'));
         //
     }
 
