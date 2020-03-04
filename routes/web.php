@@ -15,7 +15,9 @@ Route::get('/', function () {
     return view('welcome');
 });
 Route::get('/index', 'IndexController@index');
-Route::get('/create', 'CreateController@create');
+Route::resource('article', 'ArticleController');
+
+
 Auth::routes();
 
 Route::get('/home', function() {
