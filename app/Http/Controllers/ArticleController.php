@@ -89,6 +89,12 @@ class ArticleController extends Controller
     public function update(Request $request, $id)
     {
         //
+        $article = Article::find($id);
+        $article->title = $request->input('title');
+        $article->description = $request->input('description');
+        $article->category_id = $request->input('category');
+        $article->update();
+        return Redirect::route('article.index');
     }
 
     /**

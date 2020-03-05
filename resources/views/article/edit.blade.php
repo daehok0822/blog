@@ -11,14 +11,15 @@
         <div class="col-12">
             <div class="card">
                 <div class="card-body">
-                    <form action="{{ route('article.store' )}}" method="post">
+                    <form action="{{ route('article.update', ['article' => $article] )}}" method="post">
                         @csrf
+                        @method('PUT')
                         <input type="text" name="title" placeholder="제목" value="{{$article->title}}"></p>
                         <p><textarea name="description" placeholder="본문">{{$article->description}}</textarea></p>
                         <select name="category" >
                             <option value="0">- Select -</option>
                             @foreach($categories as $category)
-                                @if($category->id === $article->id)
+                                @if($category->id === $article->category_id)
                                     <option value="{{$category -> id}}" selected="selected">{{$category -> name}}</option>
                                     @else
                                     <option value="{{$category -> id}}">{{$category -> name}}</option>
