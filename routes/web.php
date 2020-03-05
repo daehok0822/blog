@@ -15,7 +15,10 @@ Route::get('/', function () {
     return view('welcome');
 });
 Route::get('/index', 'IndexController@index');
-Route::resource('article', 'ArticleController');
+Route::group(['middleware' => ['auth']], function () {
+    Route::resource('article', 'ArticleController');
+});
+
 
 
 Auth::routes();

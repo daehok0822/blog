@@ -176,7 +176,7 @@ return [
         [
             'text' => 'search',
             'search' => true,
-            'topnav' => true,
+            'topnav' => false,
         ],
         [
             'text' => 'blog',
@@ -257,14 +257,6 @@ return [
             'text'       => '글생성',
             'url'  => '/article/create',
             'icon_color' => 'blue',
-        ],
-        [
-            'text'       => '글수정',
-            'icon_color' => 'green',
-        ],
-        [
-            'text'       => '글삭제',
-            'icon_color' => 'red',
         ],
     ],
 

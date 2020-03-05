@@ -12,10 +12,9 @@
             <div class="card">
                 <div class="card-body">
                     <p class="mb-0">You are logged in!</p>
-                    <form action="/home" method="post">
+                    <form action="{{ route('article.index' )}}" method="get">
                         <input type="text" name="searchWord" id="searchWord" class="form-control pull-right" placeholder="검색어를 입력해주세요.">
                         <button type="submit" class="btn btn-default"><i class="fa fa-search"></i></button>
-
                     </form>
 
                 </div>

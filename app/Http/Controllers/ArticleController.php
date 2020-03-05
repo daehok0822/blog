@@ -2,7 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Article;
+use App\Category; //이게 추가됨
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Redirect;
 
 class ArticleController extends Controller
 {
@@ -16,6 +20,7 @@ class ArticleController extends Controller
         //
         $searchWord = $request->input('searchWord');
         $articles = Article::with('user')->articleSearch($searchWord)->orderBy('id', 'DESC')->paginate(20);
+        return view('article.list', compact('articles'));
     }
 
     /**
@@ -26,7 +31,7 @@ class ArticleController extends Controller
     public function create()
     {
         $categories = \App\Category::all();
-        return view('/create', compact('categories'));
+        return view('article.create', compact('categories'));
         //
     }
 
@@ -38,6 +43,14 @@ class ArticleController extends Controller
      */
     public function store(Request $request)
     {
+        $articleInfo =[
+            'title' => $request->input('title'),
+            'description' => $request->input('description'),
+            'category_id' => $request->input('category'),
+            'user_id' => Auth::id()
+        ];
+        Article::create($articleInfo);
+        return Redirect::route('article.index');
         //
     }
 
@@ -60,6 +73,9 @@ class ArticleController extends Controller
      */
     public function edit($id)
     {
+        $article = Article::findOrFail($id);
+        $categories = Category::all();
+        return view('article.edit', compact('article', 'categories'));
         //
     }
 

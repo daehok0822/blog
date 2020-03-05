@@ -7,6 +7,10 @@ use Illuminate\Database\Eloquent\Model;
 class Article extends Model
 {
     //
+    protected $fillable = [
+        'title', 'description', 'user_id','category_id'
+    ];
+
     public function user()
     {
         return $this->belongsTo('App\User');
@@ -17,7 +21,8 @@ class Article extends Model
         if(empty($searchWord)) {
             return $query;
         } else {
-            return $query->whereRaw("MATCH(title, body) AGAINST(? IN BOOLEAN MODE)", [$searchWord . "*"]);
+            return $query->where('description', 'like', '%' . $searchWord . '%')
+                ->orWhere('title', 'like', '%' . $searchWord . '%');
         }
     }
 
