@@ -11,9 +11,6 @@
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
 Route::get('/index', 'IndexController@index');
 Route::group(['middleware' => ['auth']], function () {
     Route::resource('article', 'ArticleController');
@@ -22,6 +19,12 @@ Route::group(['middleware' => ['auth']], function () {
 
 
 Auth::routes();
+
+
+
+Route::get('/', 'ArticleController@frontIndex')->name('article.frontIndex');
+Route::get('/view/{id}', 'ArticleController@frontShow')->name('article.frontShow');
+
 
 Route::get('/home', function() {
     return view('home');

@@ -1,21 +1,10 @@
 @extends('layout')
 
-@section('title')
-    환영합니다
-@endsection
-@section('sitetitle')
-    게임 사이트
-@endsection
-
-@section('categories')
-    @foreach($categories as $category)
-        <li>{{$category -> name}}</li>
-    @endforeach
-@endsection
 
 @section('articles')
     @foreach($articles as $article)
-        {{$article -> title}}<br>
-        {{$article -> description}}
+        <h3><a href="{{ route('article.frontShow', ['id' => $article->id]) }}">{{ $article->title }}</a></h3>
+        작성자:{{$article->user->name}}<br>
+        생성일:{{$article->created_at}}최근수정일:{{$article->updated_at}}
     @endforeach
 @endsection

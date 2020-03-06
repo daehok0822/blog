@@ -16,7 +16,6 @@
                         <input type="text" name="searchWord" id="searchWord" class="form-control pull-right" placeholder="검색어를 입력해주세요.">
                         <button type="submit" class="btn btn-default"><i class="fa fa-search"></i></button>
                     </form>
-
                 </div>
             </div>
         </div>

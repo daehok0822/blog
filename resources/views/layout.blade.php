@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <title>@yield('title')</title>
+    <title>환영합니다</title>
     <style>
         h1{
             text-align: center;
@@ -29,12 +29,21 @@
 <a href="/login">로그인</a>
 <a href="/logout">로그아웃</a>
 <a href="/register">회원가입</a>
-<a href="/create">글쓰기</a>
-<h1>@yield('sitetitle')</h1>
+<link rel="stylesheet" href="{{ asset('vendor/fontawesome-free/css/all.min.css') }}">
+<link rel="stylesheet" href="{{ asset('vendor/overlayScrollbars/css/OverlayScrollbars.min.css') }}">
+<link rel="stylesheet" href="{{ asset('vendor/adminlte/dist/css/adminlte.min.css') }}">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic">
+<form action="{{ route('article.frontIndex' )}}" method="get">
+    <input type="text" name="searchWord" id="searchWord" class="form-control pull-right" placeholder="검색어를 입력해주세요.">
+    <button type="submit" class="btn btn-default"><i class="fa fa-search"></i></button>
+</form>
+<h1>글 사이트</h1>
 <div id="cat_article">
     <div id="categories">
         <ul>
-            @yield('categories')
+            @foreach($categories as $category)
+                <li><a href="{{ route('article.frontIndex') }}/?category_id={{ $category->id }}">{{$category -> name}}</a></li>
+            @endforeach
         </ul>
     </div>
     <div id="articles">

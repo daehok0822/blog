@@ -8,9 +8,9 @@
 
 @section('content')
     @foreach($articles as $article)
-        <h3>{{$article->title}}</h3>{{$article->user->name}}
-        <a href="{{ route('article.edit', ['article' => $article]) }}">수정</a><br>
-        {{$article->description}}
+        <h3><a href="{{ route('article.show', ['article' => $article]) }}">{{ $article->title }}</a></h3>
+        작성자:{{$article->user->name}}<br>
+        생성일:{{$article->created_at}}최근수정일:{{$article->updated_at}}
     @endforeach
 
 

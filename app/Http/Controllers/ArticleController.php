@@ -22,6 +22,23 @@ class ArticleController extends Controller
         $articles = Article::with('user')->articleSearch($searchWord)->orderBy('id', 'DESC')->paginate(20);
         return view('article.list', compact('articles'));
     }
+    public function frontIndex(Request $request)
+    {
+        $searchWord = $request->input('searchWord');
+        $category_id = $request->input('category_id');
+
+        $articleObj = Article::with('user');
+        $categories = Category::all();
+        if (!empty($searchWord)) {
+            $articleObj->articleSearch($searchWord);
+        }
+        if (!empty($category_id)) {
+            $articleObj->where('category_id', $category_id);
+        }
+        $articles = $articleObj->orderBy('id', 'DESC')->paginate(20);
+        return view('index', compact('articles', 'categories'));
+
+    }
 
     /**
      * Show the form for creating a new resource.
@@ -62,7 +79,14 @@ class ArticleController extends Controller
      */
     public function show($id)
     {
-        //
+        $article = Article::findOrFail($id);
+        return view('article.detail', compact('article'));
+
+    }
+    public function frontShow($id){
+        $article = Article::findOrFail($id);
+        $categories = Category::all();
+        return view('frontShow', compact('article', 'categories'));
     }
 
     /**
@@ -105,6 +129,9 @@ class ArticleController extends Controller
      */
     public function destroy($id)
     {
+        $article = Article::find($id);
+        $article->delete();
+        return Redirect::route('article.index');
         //
     }
 }

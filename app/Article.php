@@ -25,5 +25,14 @@ class Article extends Model
                 ->orWhere('title', 'like', '%' . $searchWord . '%');
         }
     }
+//    public function scopecategorySearch($query, $id){
+//        if(empty($id)) {
+//            return $query;
+//        } else {
+//            return $query->join('categories','articles.category_id', '=', 'categories.id')
+//                ->where('categories.id', $id);
+//
+//        }
+//    }
 
 }
