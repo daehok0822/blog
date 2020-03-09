@@ -14,9 +14,10 @@
 Route::get('/index', 'IndexController@index');
 Route::group(['middleware' => ['auth']], function () {
     Route::resource('article', 'ArticleController');
+
 });
 
-
+Route::resource('comment', 'CommentController');
 
 Auth::routes();
 

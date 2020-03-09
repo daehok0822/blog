@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Article;
 use App\Category; //이게 추가됨
+use App\Comment;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Redirect;
@@ -86,7 +87,8 @@ class ArticleController extends Controller
     public function frontShow($id){
         $article = Article::findOrFail($id);
         $categories = Category::all();
-        return view('frontShow', compact('article', 'categories'));
+        $comments = Comment::where('article_id', $id);
+        return view('frontShow', compact('article', 'categories', 'comments'));
     }
 
     /**
