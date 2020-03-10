@@ -19,7 +19,6 @@
                         @method('DELETE')
                         <input type="submit" value="글삭제">
                     </form>
-                    </form>
                 </div>
             </div>
         </div>

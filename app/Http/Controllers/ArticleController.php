@@ -87,7 +87,7 @@ class ArticleController extends Controller
     public function frontShow($id){
         $article = Article::findOrFail($id);
         $categories = Category::all();
-        $comments = Comment::where('article_id', $id);
+        $comments = Comment::where('article_id', $id)->get();
         return view('frontShow', compact('article', 'categories', 'comments'));
     }
 

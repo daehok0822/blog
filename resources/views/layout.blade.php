@@ -26,6 +26,7 @@
 
 </head>
 <body>
+<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.6.2/jquery.min.js"></script>
 <a href="/login">로그인</a>
 <a href="/logout">로그아웃</a>
 <a href="/register">회원가입</a>
