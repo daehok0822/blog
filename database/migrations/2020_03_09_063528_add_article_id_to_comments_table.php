@@ -14,9 +14,6 @@ class AddArticleIdToCommentsTable extends Migration
     public function up()
     {
         Schema::table('comments', function (Blueprint $table) {
-            //
-        });
-        Schema::table('comments', function (Blueprint $table) {
             $table->bigInteger('article_id')->after('description')->index();
 
         });
@@ -29,8 +26,8 @@ class AddArticleIdToCommentsTable extends Migration
      */
     public function down()
     {
-        Schema::table('articles', function (Blueprint $table) {
-            $table->dropColumn('comment_id');
+        Schema::table('comments', function (Blueprint $table) {
+            $table->dropColumn('article_id');
         });
     }
 

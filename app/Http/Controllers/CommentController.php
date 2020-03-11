@@ -106,11 +106,19 @@ class CommentController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Request $request, $id)
     {
         $comment = Comment::find($id);
-        $article_id = $comment->article_id;
-        $comment->delete();
-        return Redirect::route('article.frontShow',['id'=>$article_id]);
+        if (Hash::check($request->input('password'), $comment->password)) {
+            $comment->delete();
+        }else{
+            return response()->json([
+                'result' => '실패',
+            ]);
+        }
+        return response()->json([
+            'result' => '성공',
+            'id' => $id
+        ]);
     }
 }
