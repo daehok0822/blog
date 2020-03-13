@@ -16,13 +16,14 @@ class Article extends Model
         return $this->belongsTo('App\User');
     }
 
-    public function scopearticleSearch($query, $searchWord)
+    public function scopeArticleSearch($query, $searchWord)
     {
         if(empty($searchWord)) {
             return $query;
         } else {
-            return $query->where('description', 'like', '%' . $searchWord . '%')
-                ->orWhere('title', 'like', '%' . $searchWord . '%');
+            return $query->whereRaw("MATCH(title, description) AGAINST(? IN BOOLEAN MODE)", [$searchWord . "*"]);
+//            return $query->where('description', 'like', '%' . $searchWord . '%')
+//                ->orWhere('title', 'like', '%' . $searchWord . '%');
         }
     }
 //    public function scopecategorySearch($query, $id){

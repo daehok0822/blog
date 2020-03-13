@@ -25,6 +25,7 @@ class ArticleController extends Controller
     }
     public function frontIndex(Request $request)
     {
+
         $searchWord = $request->input('searchWord');
         $category_id = $request->input('category_id');
 
