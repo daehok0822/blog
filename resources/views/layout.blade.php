@@ -3,43 +3,174 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-
+    <link href="https://fonts.googleapis.com/css?family=Nanum+Gothic:400,700,800&display=swap&subset=korean" rel="stylesheet">
+    {{--    <link rel="stylesheet" href="{{ asset('vendor/fontawesome-free/css/all.min.css') }}">--}}
+    {{--    <link rel="stylesheet" href="{{ asset('vendor/overlayScrollbars/css/OverlayScrollbars.min.css') }}">--}}
+    {{--    <link rel="stylesheet" href="{{ asset('vendor/adminlte/dist/css/adminlte.min.css') }}">--}}
+    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic">
     <title>환영합니다</title>
     <style>
-        h1{
+        body {
+            margin: 0;
+        }
+
+        ul {
+            list-style: none;
+        }
+
+        #TopScreen {
+            background-color: #B6C5C8;
+        }
+        #login_links ul{
+            padding: 0;
+        }
+
+        #login_links li {
+            float: left;
+            font-weight: 500;
+            margin: 0;
+        }
+
+        #login_links .saparate li::after {
+            content: "|";
+            margin: 0;
+            padding: 0 3px 0 5px;
+        }
+
+        h1 {
             text-align: center;
-            border-bottom: 3px solid black;
             margin: 0;
             padding: 20px;
+            font-family: 'Nanum Gothic', sans-serif;
+            font-size: 50px;
+            font-weight: bold
+
         }
-        #categories ul{
-            margin: 0;
-            border-right: 3px solid black;
-            height: 1000px;
-            padding: 20px;
+
+        #search_bar {
+            border-bottom: 5px solid #644756;
         }
-        #cat_article{
+
+        #BottomScreen {
             display: grid;
-            grid-template-columns:200px 1fr ;
+            grid-template-columns: 200px 1fr;
         }
+
+        #articles {
+            border-left: 2px solid #644756;
+            border-bottom: 2px solid #644756;
+            padding: 20px;
+        }
+
+        #categories ul {
+            font-size: 17px;
+            font-weight: 600;
+            color: #644756;
+            padding: 20px;
+            line-height: 30px;
+        }
+
+
+        #login_links a:link {
+            color: #644756;
+            text-decoration: none;
+        }
+
+        #login_links a:visited {
+            color: #644756;
+            text-decoration: none;
+        }
+
+        #login_links a:hover {
+            color: #644756;
+            text-decoration: underline;
+        }
+
+        #site_title a:link {
+            color: #644756;
+            text-decoration: none;
+            text-align: center;
+        }
+
+        #site_title a:visited {
+            color: #644756;
+            text-decoration: none;
+        }
+
+        #site_title a:hover {
+            color: #644756;
+        }
+
+        #categories a:link {
+            color: #644756;
+            text-decoration: none;
+        }
+
+        #categories a:visited {
+            color: #644756;
+            text-decoration: none;
+        }
+
+        #categories a:hover {
+            color: #644756;
+            text-decoration: underline;
+        }
+
+        #articles a:link {
+            color: #644756;
+            text-decoration: none;
+        }
+
+        #articles a:visited {
+            color: #644756;
+            text-decoration: none;
+        }
+
+        #articles a:hover {
+            color: #644756;
+            text-decoration: underline;
+        }
+
+
     </style>
 
 </head>
 <body>
-<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.6.2/jquery.min.js"></script>
-<a href="/login">로그인</a>
-<a href="/logout">로그아웃</a>
-<a href="/register">회원가입</a>
-<link rel="stylesheet" href="{{ asset('vendor/fontawesome-free/css/all.min.css') }}">
-<link rel="stylesheet" href="{{ asset('vendor/overlayScrollbars/css/OverlayScrollbars.min.css') }}">
-<link rel="stylesheet" href="{{ asset('vendor/adminlte/dist/css/adminlte.min.css') }}">
-<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic">
-<form action="{{ route('article.frontIndex' )}}" method="get">
-    <input type="text" name="searchWord" id="searchWord" class="form-control pull-right" placeholder="검색어를 입력해주세요.">
-    <button type="submit" class="btn btn-default"><i class="fa fa-search"></i></button>
-</form>
-<h1>글 사이트</h1>
-<div id="cat_article">
+<div id="TopScreen" style="margin:0 auto;">
+    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.6.2/jquery.min.js"></script>
+
+    <div id="login_links">
+        <ul style="margin:0">
+            <div class="saparate">
+                <li><a href="/login">로그인</a></li>
+                <li><a href="/logout">로그아웃</a></li>
+            </div>
+            <li><a href="/register">회원가입</a></li>
+        </ul>
+    </div>
+
+
+    <div id="">
+        <h1 id="site_title"><a href="{{ route('article.frontIndex') }}">게임 사이트</a></h1>
+    </div>
+
+    <div id="search_bar">
+        <form action="{{ route('article.frontIndex' )}}" method="get" >
+            <input style="border: 0" type="text" name="searchWord" id="searchWord" placeholder="검색">
+{{--            <button type="submit" class="btn btn-default"><i class="fa fa-search"></i><img src="https://www.codingfactory.net/wp-content/uploads/button_search.png"></button>--}}
+            <button style="border: 0"><i class="fa fa-search"></i></button>
+        </form>
+    </div>
+
+
+
+
+
+</div>
+
+
+<div id="BottomScreen">
     <div id="categories">
         <ul>
             @foreach($categories as $category)
