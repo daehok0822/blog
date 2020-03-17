@@ -4,14 +4,19 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link href="https://fonts.googleapis.com/css?family=Nanum+Gothic:400,700,800&display=swap&subset=korean" rel="stylesheet">
-    {{--    <link rel="stylesheet" href="{{ asset('vendor/fontawesome-free/css/all.min.css') }}">--}}
-    {{--    <link rel="stylesheet" href="{{ asset('vendor/overlayScrollbars/css/OverlayScrollbars.min.css') }}">--}}
-    {{--    <link rel="stylesheet" href="{{ asset('vendor/adminlte/dist/css/adminlte.min.css') }}">--}}
+        <link rel="stylesheet" href="{{ asset('vendor/fontawesome-free/css/all.min.css') }}">
+        <link rel="stylesheet" href="{{ asset('vendor/overlayScrollbars/css/OverlayScrollbars.min.css') }}">
+        <link rel="stylesheet" href="{{ asset('vendor/adminlte/dist/css/adminlte.min.css') }}">
     <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic">
+
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap-theme.min.css">
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>
     <title>환영합니다</title>
     <style>
         body {
+
             margin: 0;
         }
 
@@ -23,7 +28,7 @@
             background-color: #B6C5C8;
         }
         #login_links ul{
-            padding: 0;
+            padding-left: 12px;
         }
 
         #login_links li {
@@ -38,8 +43,13 @@
             padding: 0 3px 0 5px;
         }
 
+        #site_title{
+            margin: 0 auto;
+            width: 300px;
+
+        }
+
         h1 {
-            text-align: center;
             margin: 0;
             padding: 20px;
             font-family: 'Nanum Gothic', sans-serif;
@@ -49,20 +59,28 @@
         }
 
         #search_bar {
-            border-bottom: 5px solid #644756;
+            border-bottom: 1px solid #4b413e;
+            padding-left: 15px;
         }
 
         #BottomScreen {
             display: grid;
             grid-template-columns: 200px 1fr;
+
         }
 
         #articles {
-            border-left: 2px solid #644756;
-            border-bottom: 2px solid #644756;
+            /*background-color: rgb(212,222,224);*/
+            border-left: 1px solid #644756;
+            border-bottom: 1px solid #644756;
             padding: 20px;
+
         }
 
+        #categories{
+            background-color: rgb(233,233,233);
+            /*background-color: rgb(212,222,224);*/
+        }
         #categories ul {
             font-size: 17px;
             font-weight: 600;
@@ -151,8 +169,8 @@
     </div>
 
 
-    <div id="">
-        <h1 id="site_title"><a href="{{ route('article.frontIndex') }}">게임 사이트</a></h1>
+    <div id="site_title">
+        <h1><a href="{{ route('article.frontIndex') }}">게임 사이트</a></h1>
     </div>
 
     <div id="search_bar">

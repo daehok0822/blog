@@ -53,20 +53,65 @@
     });
 </script>
 
-<form action="{{ route('comment.store')}}" method="post">
+<form role="form" action="{{ route('comment.store')}}" method="post">
     @csrf
     <input type="hidden" name="article_id" value="{{ $article->id }}">
-    <input type="text" name="nickname" placeholder="닉네임"></p>
-    <input type="text" name="password" placeholder="비밀번호"></p>
-    <p><textarea name="description"></textarea></p>
-    <p><input type="submit" name="댓글쓰기"></p>
+{{--    <input type="text" name="nickname" placeholder="닉네임"></p>--}}
+{{--    <input type="text" name="password" placeholder="비밀번호"></p>--}}
+{{--    <p><textarea name="description"></textarea></p>--}}
+{{--    <p><input type="submit" name="댓글쓰기"></p>--}}
+    <div class="row">
+        <div class="form-group col-xs-3">
+            <input type="text" name="nickname" class="form-control" placeholder="닉네임">
+            <input type="text" name="password" class="form-control" placeholder="비밀번호">
+        </div>
+        <div class="form-group col-xs-5">
+            <textarea class="form-control" rows="3" name="description" placeholder="Enter ..."></textarea>
+            <input class="fa-pull-right" type="submit" name="댓글쓰기">
+        </div>
+    </div>
+
 </form>
 <ul>
     @foreach($comments as $comment)
         <div id="comment_{{ $comment->id }}">
-            <li>{{$comment -> nickname}}</li>
-            <li id="comment_description_{{ $comment->id }}">{{$comment->description}}</li>
-            <li>생성일:{{$comment->created_at}}최근수정일:{{$comment->updated_at}}</li>
+{{--            <li>{{$comment -> nickname}}</li>--}}
+{{--            <li id="comment_description_{{ $comment->id }}">{{$comment->description}}</li>--}}
+{{--            <li>작성일: {{$comment->created_at}} | 최근 수정일: {{$comment->updated_at}}</li>--}}
+
+
+            <table class="table table-hover">
+                <tbody>
+                <tr>
+                    <th>글쓴이</th>
+                    <th>내용</th>
+                    <th>작성일</th>
+                </tr>
+                <tr>
+                    <td class="sorting_1">{{$comment -> nickname}}</td>
+                    <td id="comment_description_{{ $comment->id }}">{{$comment->description}}</td>
+                    <td>{{$comment->created_at}}</td>
+                </tr>
+                </tbody>
+            </table>
+
+
+{{--            <table id="example2" class="table table-bordered table-hover dataTable" role="grid" aria-describedby="example2_info">--}}
+{{--                <thead>--}}
+{{--                <tr>--}}
+{{--                    <th rowspan="1" colspan="1">제목</th>--}}
+{{--                    <th rowspan="1" colspan="1">글쓴이</th>--}}
+{{--                    <th rowspan="1" colspan="1">작성일</th>--}}
+{{--                </tr>--}}
+{{--                </thead>--}}
+{{--                <tbody>--}}
+{{--                <tr role="row" class="odd">--}}
+{{--                    <td class="sorting_1">{{$comment -> nickname}}</td>--}}
+{{--                    <td id="comment_description_{{ $comment->id }}">{{$comment->description}}</td>--}}
+{{--                    <td>{{$comment->created_at}}</td>--}}
+{{--                </tr><tr role="row" class="even">--}}
+{{--            </table>--}}
+
 
             <form id="modify_form_{{ $comment->id }}" class="modify_form" action="{{ route('comment.update',['comment' => $comment])}}" method="post">
                 @csrf
@@ -74,7 +119,8 @@
                 <input type="hidden" name="article_id" value="{{ $article->id }}">
                 <input type="text" name="password" placeholder="비밀번호"></p>
                 <p><textarea name="description">{{$comment->description}}</textarea></p>
-                <p><input type="submit" name="전송"></p>
+
+                <p><input type="submit" name="수정"></p>
             </form>
             <form id="delete_form_{{ $comment->id }}" class="delete_form" action="{{ route('comment.destroy', ['comment' => $comment] )}}" method="post">
                 @csrf
@@ -84,8 +130,10 @@
             </form>
 
             <div id="buttons_{{ $comment->id }}">
-                <button class="deleteButton" data-id="{{ $comment->id }}">삭제</button>
-                <button class="modifyButton" data-id="{{ $comment->id }}">수정</button>
+                <a class="modifyButton" data-id="{{ $comment->id }}" type="button" class="btn btn-block btn-default">수정</a>
+                <a class="deleteButton" data-id="{{ $comment->id }}" type="button" class="btn btn-block btn-default">삭제</a>
+{{--                <button class="deleteButton" data-id="{{ $comment->id }}">삭제</button>--}}
+{{--                <button class="modifyButton" data-id="{{ $comment->id }}">수정</button>--}}
             </div>
         </div>
 
