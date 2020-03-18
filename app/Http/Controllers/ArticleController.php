@@ -38,7 +38,18 @@ class ArticleController extends Controller
             $articleObj->where('category_id', $category_id);
         }
         $articles = $articleObj->orderBy('id', 'DESC')->paginate(20);
-        return view('index', compact('articles', 'categories'));
+
+        if(Auth::check()){
+            if (Gate::allows('Admin_ability')) {
+                $separate = '<li><a href="/home">관리자 페이지</a></li><li><a href="/logout">로그아웃</a></li>';
+            }else{
+                $separate = '<li><a href="/logout">로그아웃</a></li>';
+            }
+        }else{
+            $separate = '<li><a href="/login">로그인</a></li><li><a href="/register">회원가입</a></li>';
+        }
+
+        return view('index', compact('articles', 'categories','separate'));
 
     }
 

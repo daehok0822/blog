@@ -161,10 +161,8 @@
     <div id="login_links">
         <ul style="margin:0">
             <div class="saparate">
-                <li><a href="/login">로그인</a></li>
-                <li><a href="/logout">로그아웃</a></li>
+                {{$separate}}
             </div>
-            <li><a href="/register">회원가입</a></li>
         </ul>
     </div>
 
