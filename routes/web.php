@@ -14,7 +14,6 @@
 Route::get('/index', 'IndexController@index');
 Route::group(['middleware' => ['auth']], function () {
     Route::resource('article', 'ArticleController');
-
 });
 
 Route::resource('comment', 'CommentController');
@@ -25,6 +24,7 @@ Auth::routes();
 
 Route::get('/', 'ArticleController@frontIndex')->name('article.frontIndex');
 Route::get('/view/{id}', 'ArticleController@frontShow')->name('article.frontShow');
+Route::get('/article/user', 'ArticleController@userShow')->name('article.userShow');
 
 
 Route::get('/home', function() {

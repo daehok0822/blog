@@ -258,6 +258,12 @@ return [
             'url'  => '/article/create',
             'icon_color' => 'blue',
         ],
+        ['header' => 'users'],
+        [
+            'text'       => '유저',
+            'url'  => '/article/user',
+            'icon_color' => 'blue',
+        ]
     ],
 
     /*

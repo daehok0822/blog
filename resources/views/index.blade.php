@@ -20,7 +20,6 @@
                 <td>{{$article->user->name}}</td>
                 <td>{{$article->created_at}}</td>
             </tr>
-            <tr role="row" class="even">
         @endforeach
     </table>
 

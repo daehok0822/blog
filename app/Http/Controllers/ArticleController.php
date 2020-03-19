@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Article;
 use App\Category; //이게 추가됨
 use App\Comment;
+use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Gate;
@@ -97,6 +98,10 @@ class ArticleController extends Controller
         $article = Article::findOrFail($id);
         return view('article.detail', compact('article'));
 
+    }
+    public function userShow(){
+        $users = User::all();
+        return view('article.user', compact('users'));
     }
     public function frontShow($id){
         $article = Article::findOrFail($id);
