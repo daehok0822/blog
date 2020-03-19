@@ -3,6 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <script type="text/javascript" src="https://code.jquery.com/jquery-1.12.4.min.js"></script>
     <link href="https://fonts.googleapis.com/css?family=Nanum+Gothic:400,700,800&display=swap&subset=korean" rel="stylesheet">
         <link rel="stylesheet" href="{{ asset('vendor/fontawesome-free/css/all.min.css') }}">
         <link rel="stylesheet" href="{{ asset('vendor/overlayScrollbars/css/OverlayScrollbars.min.css') }}">
@@ -152,16 +153,22 @@
 
 
     </style>
-
+    @include('auth/logout_form')
+    <script>
+        $(document).ready(function(){
+            $('#logout').click(function (ev) {
+                ev.preventDefault();
+                $('#logout-form').submit();
+            });
+        });
+    </script>
 </head>
 <body>
 <div id="TopScreen" style="margin:0 auto;">
-    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.6.2/jquery.min.js"></script>
-
     <div id="login_links">
         <ul style="margin:0">
             <div class="saparate">
-                {{$separate}}
+                {!! $separate !!}
             </div>
         </ul>
     </div>

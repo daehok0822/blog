@@ -7,6 +7,7 @@ use App\Category; //이게 추가됨
 use App\Comment;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Redirect;
 
 class ArticleController extends Controller
@@ -41,9 +42,10 @@ class ArticleController extends Controller
 
         if(Auth::check()){
             if (Gate::allows('Admin_ability')) {
-                $separate = '<li><a href="/home">관리자 페이지</a></li><li><a href="/logout">로그아웃</a></li>';
+                $separate = '<li><a href="/home">관리자 페이지</a></li><li><a href="/logout" id="logout">로그아웃</a></li>';
             }else{
-                $separate = '<li><a href="/logout">로그아웃</a></li>';
+                $separate = '<a href="" id="logout">로그아웃</a>';
+
             }
         }else{
             $separate = '<li><a href="/login">로그인</a></li><li><a href="/register">회원가입</a></li>';
@@ -100,7 +102,16 @@ class ArticleController extends Controller
         $article = Article::findOrFail($id);
         $categories = Category::all();
         $comments = Comment::where('article_id', $id)->get();
-        return view('frontShow', compact('article', 'categories', 'comments'));
+        if(Auth::check()){
+            if (Gate::allows('Admin_ability')) {
+                $separate = '<li><a href="/home">관리자 페이지</a></li><li><a href="/logout">로그아웃</a></li>';
+            }else{
+                $separate = '<li><a href="/logout">로그아웃</a></li>';
+            }
+        }else{
+            $separate = '<li><a href="/login">로그인</a></li><li><a href="/register">회원가입</a></li>';
+        }
+        return view('frontShow', compact('article', 'categories', 'comments','separate'));
     }
 
     /**
