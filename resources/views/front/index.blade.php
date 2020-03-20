@@ -1,4 +1,4 @@
-@extends('layout')
+@extends('front.layout')
 
 
 @section('articles')
@@ -15,7 +15,7 @@
         @foreach($articles as $article)
             <tr role="row" class="odd">
                 <td class="sorting_1"><a
-                        href="{{ route('article.frontShow', ['id' => $article->id]) }}">{{ $article->title }}</a>{{ $article->title }}
+                        href="{{ route('front.frontShow', ['id' => $article->id]) }}">{{ $article->title }}</a>{{ $article->title }}
                 </td>
                 <td>{{$article->user->name}}</td>
                 <td>{{$article->created_at}}</td>

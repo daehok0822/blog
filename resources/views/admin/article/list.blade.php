@@ -13,5 +13,5 @@
         생성일:{{$article->created_at}}최근수정일:{{$article->updated_at}}
     @endforeach
 
-
+    {{ $articles->links() }}
 @stop

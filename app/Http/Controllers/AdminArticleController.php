@@ -11,7 +11,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Redirect;
 
-class ArticleController extends Controller
+class AdminArticleController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -22,38 +22,14 @@ class ArticleController extends Controller
     {
         //
         $searchWord = $request->input('searchWord');
-        $articles = Article::with('user')->articleSearch($searchWord)->orderBy('id', 'DESC')->paginate(20);
-        return view('article.list', compact('articles'));
-    }
-    public function frontIndex(Request $request)
-    {
-
-        $searchWord = $request->input('searchWord');
-        $category_id = $request->input('category_id');
-
         $articleObj = Article::with('user');
-        $categories = Category::all();
         if (!empty($searchWord)) {
             $articleObj->articleSearch($searchWord);
         }
-        if (!empty($category_id)) {
-            $articleObj->where('category_id', $category_id);
-        }
         $articles = $articleObj->orderBy('id', 'DESC')->paginate(20);
 
-        if(Auth::check()){
-            if (Gate::allows('Admin_ability')) {
-                $separate = '<li><a href="/home">관리자 페이지</a></li><li><a href="/logout" id="logout">로그아웃</a></li>';
-            }else{
-                $separate = '<a href="" id="logout">로그아웃</a>';
 
-            }
-        }else{
-            $separate = '<li><a href="/login">로그인</a></li><li><a href="/register">회원가입</a></li>';
-        }
-
-        return view('index', compact('articles', 'categories','separate'));
-
+        return view('admin.article.list', compact('articles'));
     }
 
     /**
@@ -64,7 +40,7 @@ class ArticleController extends Controller
     public function create()
     {
         $categories = \App\Category::all();
-        return view('article.create', compact('categories'));
+        return view('admin.article.create', compact('categories'));
         //
     }
 
@@ -83,7 +59,7 @@ class ArticleController extends Controller
             'user_id' => Auth::id()
         ];
         Article::create($articleInfo);
-        return Redirect::route('article.index');
+        return Redirect::route('admin.index');
         //
     }
 
@@ -96,28 +72,10 @@ class ArticleController extends Controller
     public function show($id)
     {
         $article = Article::findOrFail($id);
-        return view('article.detail', compact('article'));
+        return view('admin.article.detail', compact('article'));
 
     }
-    public function userShow(){
-        $users = User::all();
-        return view('article.user', compact('users'));
-    }
-    public function frontShow($id){
-        $article = Article::findOrFail($id);
-        $categories = Category::all();
-        $comments = Comment::where('article_id', $id)->get();
-        if(Auth::check()){
-            if (Gate::allows('Admin_ability')) {
-                $separate = '<li><a href="/home">관리자 페이지</a></li><li><a href="/logout">로그아웃</a></li>';
-            }else{
-                $separate = '<li><a href="/logout">로그아웃</a></li>';
-            }
-        }else{
-            $separate = '<li><a href="/login">로그인</a></li><li><a href="/register">회원가입</a></li>';
-        }
-        return view('frontShow', compact('article', 'categories', 'comments','separate'));
-    }
+
 
     /**
      * Show the form for editing the specified resource.
@@ -129,7 +87,7 @@ class ArticleController extends Controller
     {
         $article = Article::findOrFail($id);
         $categories = Category::all();
-        return view('article.edit', compact('article', 'categories'));
+        return view('admin.article.edit', compact('article', 'categories'));
         //
     }
 
@@ -148,7 +106,7 @@ class ArticleController extends Controller
         $article->description = $request->input('description');
         $article->category_id = $request->input('category');
         $article->update();
-        return Redirect::route('article.index');
+        return Redirect::route('admin.index');
     }
 
     /**
@@ -161,7 +119,7 @@ class ArticleController extends Controller
     {
         $article = Article::find($id);
         $article->delete();
-        return Redirect::route('article.index');
+        return Redirect::route('admin.index');
         //
     }
 }

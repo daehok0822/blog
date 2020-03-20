@@ -255,13 +255,13 @@ return [
         ['header' => 'articles'],
         [
             'text'       => '글생성',
-            'url'  => '/article/create',
+            'url'  => 'admin/article/create',
             'icon_color' => 'blue',
         ],
         ['header' => 'users'],
         [
             'text'       => '유저',
-            'url'  => '/article/user',
+            'url'  => 'admin/user',
             'icon_color' => 'blue',
         ]
     ],
