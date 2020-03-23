@@ -75,11 +75,6 @@
 <ul>
     @foreach($comments as $comment)
         <div id="comment_{{ $comment->id }}">
-{{--            <li>{{$comment -> nickname}}</li>--}}
-{{--            <li id="comment_description_{{ $comment->id }}">{{$comment->description}}</li>--}}
-{{--            <li>작성일: {{$comment->created_at}} | 최근 수정일: {{$comment->updated_at}}</li>--}}
-
-
             <table class="table table-hover">
                 <tbody>
                 <tr>
@@ -94,24 +89,6 @@
                 </tr>
                 </tbody>
             </table>
-
-
-{{--            <table id="example2" class="table table-bordered table-hover dataTable" role="grid" aria-describedby="example2_info">--}}
-{{--                <thead>--}}
-{{--                <tr>--}}
-{{--                    <th rowspan="1" colspan="1">제목</th>--}}
-{{--                    <th rowspan="1" colspan="1">글쓴이</th>--}}
-{{--                    <th rowspan="1" colspan="1">작성일</th>--}}
-{{--                </tr>--}}
-{{--                </thead>--}}
-{{--                <tbody>--}}
-{{--                <tr role="row" class="odd">--}}
-{{--                    <td class="sorting_1">{{$comment -> nickname}}</td>--}}
-{{--                    <td id="comment_description_{{ $comment->id }}">{{$comment->description}}</td>--}}
-{{--                    <td>{{$comment->created_at}}</td>--}}
-{{--                </tr><tr role="row" class="even">--}}
-{{--            </table>--}}
-
 
             <form id="modify_form_{{ $comment->id }}" class="modify_form" action="{{ route('comment.update',['comment' => $comment])}}" method="post">
                 @csrf
@@ -132,11 +109,7 @@
             <div id="buttons_{{ $comment->id }}">
                 <a class="modifyButton" data-id="{{ $comment->id }}" type="button" class="btn btn-block btn-default">수정</a>
                 <a class="deleteButton" data-id="{{ $comment->id }}" type="button" class="btn btn-block btn-default">삭제</a>
-{{--                <button class="deleteButton" data-id="{{ $comment->id }}">삭제</button>--}}
-{{--                <button class="modifyButton" data-id="{{ $comment->id }}">수정</button>--}}
             </div>
         </div>
-
-
     @endforeach
 </ul>

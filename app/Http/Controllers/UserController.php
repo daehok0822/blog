@@ -71,7 +71,16 @@ class UserController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $user = User::find($id);
+        $user->name = $request->input('name');
+        $user->email = $request->input('email');
+        $user->password = $request->input('password');
+
+        $user->update();
+        return response()->json([
+            'id' => $id
+        ]);
+
     }
 
     /**
@@ -82,6 +91,10 @@ class UserController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $user = User::find($id);
+        $user->delete();
+        return response()->json([
+            'id' => $id
+        ]);
     }
 }

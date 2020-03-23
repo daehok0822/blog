@@ -80,9 +80,9 @@ class FrontArticleController extends Controller
         $comments = Comment::where('article_id', $id)->get();
         if(Auth::check()){
             if (Gate::allows('Admin_ability')) {
-                $separate = '<li><a href="/admin">관리자 페이지</a></li><li><a href="/logout">로그아웃</a></li>';
+                $separate = '<li><a href="/admin">관리자 페이지</a></li><li><a href="" id="logout">로그아웃</a></li>';
             }else{
-                $separate = '<li><a href="/logout">로그아웃</a></li>';
+                $separate = '<li><a href="" id="logout">로그아웃</a></li>';
             }
         }else{
             $separate = '<li><a href="/login">로그인</a></li><li><a href="/register">회원가입</a></li>';
