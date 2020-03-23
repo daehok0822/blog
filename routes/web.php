@@ -27,10 +27,8 @@ Route::resource('comment', 'CommentController');
 
 Auth::routes();
 
-Route::get('/', function() { // 이게 blog.test/admin/ 이 되는 거여
-    return view('front.index');
-})->name('front.index');
-//Route::get('/', 'ArticleController@frontIndex')->name('article.frontIndex');
+
+Route::get('/', 'IndexController@index')->name('front.index');
 //Route::get('/view/{id}', 'ArticleController@frontShow')->name('article.frontShow');
 
 

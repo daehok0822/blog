@@ -175,11 +175,11 @@
 
 
     <div id="site_title">
-        <h1><a href="{{ route('article.frontIndex') }}">게임 사이트</a></h1>
+        <h1><a href="{{ route('front.index') }}">게임 사이트</a></h1>
     </div>
 
     <div id="search_bar">
-        <form action="{{ route('article.frontIndex' )}}" method="get" >
+        <form action="{{ route('front.index' )}}" method="get" >
             <input style="border: 0" type="text" name="searchWord" id="searchWord" placeholder="검색">
 {{--            <button type="submit" class="btn btn-default"><i class="fa fa-search"></i><img src="https://www.codingfactory.net/wp-content/uploads/button_search.png"></button>--}}
             <button style="border: 0"><i class="fa fa-search"></i></button>
@@ -197,7 +197,7 @@
     <div id="categories">
         <ul>
             @foreach($categories as $category)
-                <li><a href="{{ route('article.frontIndex') }}/?category_id={{ $category->id }}">{{$category -> name}}</a></li>
+                <li><a href="{{ route('front.index') }}/?category_id={{ $category->id }}">{{$category -> name}}</a></li>
             @endforeach
         </ul>
     </div>
