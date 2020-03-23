@@ -12,6 +12,7 @@
         $( document ).ready(function() {
             $("#modify_form").hide();
             $('.modifyButton').click(function(e){
+                var form_id = $(this).data('id');
                 $("#modify_form").show();
             });
         });
@@ -20,6 +21,7 @@
         $( document ).ready(function() {
             $("#delete_form").hide();
             $('.deleteButton').click(function(e){
+                var form_id = $(this).data('id');
                 $("#delete_form").show();
             });
         });
