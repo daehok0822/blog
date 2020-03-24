@@ -6,29 +6,24 @@
 @stop
 @section('content')
 
+@section('js')
+    <script>
+        $(document).ready(function () {
 
-
-    <script type="text/javascript">
-        $( document ).ready(function() {
             $("#modify_form").hide();
-            $('.modifyButton').click(function(e){
-                var form_id = $(this).data('id');
+            $('.modifyButton').click(function (e) {
+                var user_id = $(this).data('id');
+                $("#modify_form").attr('action', '/admin/user/' + user_id);
                 $("#modify_form").show();
             });
-        });
-    </script>
-    <script type="text/javascript">
-        $( document ).ready(function() {
+
             $("#delete_form").hide();
-            $('.deleteButton').click(function(e){
+            $('.deleteButton').click(function (e) {
                 var form_id = $(this).data('id');
                 $("#delete_form").show();
             });
-        });
-    </script>
-    <script type="text/javascript">
-        $( document ).ready(function() {
-            $("#modify_form").submit(function(e) {
+
+            $("#modify_form").submit(function (e) {
                 e.preventDefault();
                 var name = $(this).find('text[name="name"]').val();
                 var email = $(this).find('email[name="email"]').val();
@@ -40,12 +35,8 @@
                         $('#user_email_' + data.id).text(email);
                         $("#modify_form").hide();
                     }, "json");
-            })
-        });
-    </script>
-    <script type="text/javascript">
-        $( document ).ready(function() {
-            $(".delete_form").submit(function(e) {
+            });
+            $("#delete_form").submit(function (e) {
                 e.preventDefault();
                 var url = $(this).attr('action');
                 $.post(url, $(this).serialize(),
@@ -56,6 +47,9 @@
             })
         });
     </script>
+@endsection
+
+
     <table class="table table-hover">
         <thead>
         <tr>
@@ -86,7 +80,6 @@
         @endforeach
         </tbody>
     </table>
-
     <form id="modify_form" action="{{ route('user.update',['user' => $user])}}"
           method="post">
         @csrf
