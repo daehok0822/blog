@@ -72,13 +72,28 @@ class UserController extends Controller
     public function update(Request $request, $id)
     {
         $user = User::find($id);
+        if(empty($request->input('name'))){
+            return response()->json([
+                'result' => '실패',
+            ]);
+        }
+        if(empty($request->input('email'))){
+            return response()->json([
+                'result' => '실패',
+            ]);
+        }
+        if(!empty($request->input('email'))){
+            $user->password = $request->input('password');
+        }
         $user->name = $request->input('name');
         $user->email = $request->input('email');
-        $user->password = $request->input('password');
+
 
         $user->update();
         return response()->json([
-            'id' => $id
+            'id' => $id,
+            'result' => '변경되었습니다',
+
         ]);
 
     }
