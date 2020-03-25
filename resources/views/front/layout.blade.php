@@ -164,11 +164,26 @@
     </script>
 </head>
 <body>
+
 <div id="TopScreen" style="margin:0 auto;">
     <div id="login_links">
         <ul style="margin:0">
             <div class="saparate">
-                {!! $separate !!}
+
+                @if(Auth::check())
+                    @if (Gate::allows('Admin_ability'))
+                        <li><a href="/admin">관리자 페이지</a></li>
+                        <li><a href="/logout" id="logout">로그아웃</a></li>
+                    @else
+                        <a href="" id="logout">로그아웃</a></li>
+                        <li><a href="{{route("article.create")}}">글쓰기</a></li>
+                    @endif
+                @else
+                    <li><a href="/login">로그인</a></li>
+                    <li><a href="/register">회원가입</a></li>
+
+                @endif
+
             </div>
         </ul>
     </div>

@@ -14,8 +14,8 @@
             $('.modifyButton').click(function (e) {
                 var user_id = $(this).data('id');
 
-                var user_name = $(this).data('name');
-                var user_email = $(this).data('email');
+                var user_name = $(this).attr('data-name');
+                var user_email = $(this).attr('data-email');
                 // var user_password = $(this).data('password');
 
                 $( 'input#name' ).val( user_name );
@@ -49,6 +49,8 @@
                             alert('변경되었습니다')
                             $('#user_name_' + data.id).text(name);
                             $('#user_email_' + data.id).text(email);
+                            $('#user_data_' + data.id).attr('data-name', name);
+                            $('#user_data_' + data.id).attr('data-email', email);
                             $("#modify_form").hide();
                         }
 
@@ -87,8 +89,8 @@
                 <td>{{$user->created_at}}</td>
                 <td>
                     <div id="buttons_{{ $user->id }}">
-                        <a class="modifyButton" data-id="{{ $user->id }}" data-name="{{$user->name}}"
-                           data-email="{{$user->email}}" data-password="{{$user->password}}" type="button"
+                        <a class="modifyButton" id="user_data_{{ $user->id }}" data-id="{{ $user->id }}" data-name="{{$user->name}}"
+                           data-email="{{$user->email}}" type="button"
                            class="btn btn-block btn-default">수정</a>
                         <a class="deleteButton" data-id="{{ $user->id }}" type="button"
                            class="btn btn-block btn-default">삭제</a>

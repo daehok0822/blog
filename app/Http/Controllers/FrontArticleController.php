@@ -8,6 +8,7 @@ use App\Comment;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Gate;
+use Illuminate\Support\Facades\Redirect;
 
 class FrontArticleController extends Controller
 {
@@ -31,18 +32,9 @@ class FrontArticleController extends Controller
         }
         $articles = $articleObj->orderBy('id', 'DESC')->paginate(20);
 
-        if(Auth::check()){
-            if (Gate::allows('Admin_ability')) {
-                $separate = '<li><a href="/admin">관리자 페이지</a></li><li><a href="/logout" id="logout">로그아웃</a></li>';
-            }else{
-                $separate = '<a href="" id="logout">로그아웃</a>';
 
-            }
-        }else{
-            $separate = '<li><a href="/login">로그인</a></li><li><a href="/register">회원가입</a></li>';
-        }
 
-        return view('front.index', compact('articles', 'categories','separate'));
+        return view('front.index', compact('articles', 'categories'));
 
     }
 
@@ -53,7 +45,9 @@ class FrontArticleController extends Controller
      */
     public function create()
     {
-        //
+        $categories = Category::all();
+
+        return view('front.article.write', compact('categories'));
     }
 
     /**
@@ -64,7 +58,14 @@ class FrontArticleController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $articleInfo =[
+            'title' => $request->input('title'),
+            'description' => $request->input('description'),
+            'category_id' => $request->input('category'),
+            'user_id' => Auth::id()
+        ];
+        Article::create($articleInfo);
+        return Redirect::route('front.index');
     }
 
     /**
@@ -78,16 +79,8 @@ class FrontArticleController extends Controller
         $article = Article::findOrFail($id);
         $categories = Category::all();
         $comments = Comment::where('article_id', $id)->get();
-        if(Auth::check()){
-            if (Gate::allows('Admin_ability')) {
-                $separate = '<li><a href="/admin">관리자 페이지</a></li><li><a href="" id="logout">로그아웃</a></li>';
-            }else{
-                $separate = '<li><a href="" id="logout">로그아웃</a></li>';
-            }
-        }else{
-            $separate = '<li><a href="/login">로그인</a></li><li><a href="/register">회원가입</a></li>';
-        }
-        return view('front.article.frontShow', compact('article', 'categories', 'comments','separate'));
+
+        return view('front.article.frontShow', compact('article', 'categories', 'comments'));
     }
 
     /**

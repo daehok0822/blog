@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
 
 class UserController extends Controller
 {
@@ -82,8 +83,8 @@ class UserController extends Controller
                 'result' => '실패',
             ]);
         }
-        if(!empty($request->input('email'))){
-            $user->password = $request->input('password');
+        if(!empty($request->input('password'))){
+            $user->password = Hash::make($request->input('password')) ;
         }
         $user->name = $request->input('name');
         $user->email = $request->input('email');

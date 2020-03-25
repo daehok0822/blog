@@ -25,18 +25,8 @@ class IndexController extends Controller
         }
         $articles = $articleObj->orderBy('id', 'DESC')->paginate(20);
 
-        if(Auth::check()){
-            if (Gate::allows('Admin_ability')) {
-                $separate = '<li><a href="/admin">관리자 페이지</a></li><li><a href="/logout" id="logout">로그아웃</a></li>';
-            }else{
-                $separate = '<a href="" id="logout">로그아웃</a>';
 
-            }
-        }else{
-            $separate = '<li><a href="/login">로그인</a></li><li><a href="/register">회원가입</a></li>';
-        }
-
-        return view('front.index', compact('articles', 'categories','separate'));
+        return view('front.index', compact('articles', 'categories'));
     }
 
 }

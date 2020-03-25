@@ -15,7 +15,7 @@
         @foreach($articles as $article)
             <tr role="row" class="odd">
                 <td class="sorting_1">
-                    <a href="{{ route('article.show', ['article' => $article]) }}">{{ $article->title }}</a>{{ $article->title }}
+                    <a href="{{ route('article.show', ['article' => $article]) }}">{{ $article->title }}</a>
                 </td>
                 <td>{{$article->user->name}}</td>
                 <td>{{$article->created_at}}</td>
