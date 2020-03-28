@@ -9,7 +9,10 @@
         <script>
             // Replace the <textarea id="editor1"> with a CKEditor
             // instance, using default configuration.
-            CKEDITOR.replace('editor1');
+            CKEDITOR.replace('editor1', {
+                filebrowserUploadUrl: "{{route('ckeditor.upload', ['_token' => csrf_token() ])}}",
+                filebrowserUploadMethod: 'form'
+            });
         </script>
         <select name="category" >
             <option value="0">- Select -</option>
