@@ -20,10 +20,15 @@
                 <option value="{{$category -> id}}">{{$category -> name}}</option>
             @endforeach
         </select>
-        <input type="file" name="attachments[]"> <button type="button" onclick="">파일 추가</button>
+        <input type="file" id="file_attach" name="attachments[]"> <button type="button" onclick="add_attach_file()">파일 추가</button>
         <p><input type="submit"></p>
 
     </form>
-
-
+    <script>
+        function add_attach_file() {
+            var file_attach = $('#file_attach').clone();
+            file_attach.removeAttr('id');
+            $('#file_attach').after(file_attach);
+        }
+    </script>
 @endsection
