@@ -58,6 +58,19 @@ class FrontArticleController extends Controller
      */
     public function store(Request $request)
     {
+        //TODO 이미지 리사이즈
+
+        //업로드 파일 처리
+        if($request->hasFile('attachments')) {
+            foreach ($request->file('attachments') as $attachment) {
+                $originName = $attachment->getClientOriginalName();
+
+                //허용되는 확장자의 이미지인지 확인
+
+            }
+            $originName = $request->file('attachments')->getClientOriginalName();
+        }
+
         $articleInfo =[
             'title' => $request->input('title'),
             'description' => $request->input('description'),

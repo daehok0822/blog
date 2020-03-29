@@ -20,6 +20,7 @@
                 <option value="{{$category -> id}}">{{$category -> name}}</option>
             @endforeach
         </select>
+        <input type="file" name="attachments[]"> <button type="button" onclick="">파일 추가</button>
         <p><input type="submit"></p>
 
     </form>
