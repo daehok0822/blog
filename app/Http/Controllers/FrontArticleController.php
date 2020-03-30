@@ -9,6 +9,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Redirect;
+use Intervention\Image\Facades\Image;
 
 class FrontArticleController extends Controller
 {
@@ -58,6 +59,14 @@ class FrontArticleController extends Controller
      */
     public function store(Request $request)
     {
+        $contents = $request->input('description');
+
+        preg_match_all("/<img[^>]*src=[\"']?([^>\"']+)[\"']?[^>]*>/i", $contents, $matches);
+        print_r($matches[1]);
+
+
+//        $img = Image::make('foo.jpg')->resize(300, 200);
+//        $img = Image::make('uploads/images/'.$fileName)->crop(300, 300);
         $articleInfo =[
             'title' => $request->input('title'),
             'description' => $request->input('description'),

@@ -29,6 +29,7 @@ Auth::routes();
 
 
 Route::get('/', 'IndexController@index')->name('front.index');
+Route::post('ckeditor/upload', 'CkeditorController@upload')->name('ckeditor.upload');
 //Route::get('/view/{id}', 'ArticleController@frontShow')->name('article.frontShow');
 
 
