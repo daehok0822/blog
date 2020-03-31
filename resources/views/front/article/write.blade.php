@@ -18,9 +18,20 @@
                 <option value="{{$category -> id}}">{{$category -> name}}</option>
             @endforeach
         </select>
+{{--        <input type="hidden" name="image_thumbnail" id="image_thumbnail" >--}}
+{{--        <input type="hidden" name="image_origin" id="image_origin">--}}
         <p><input type="submit"></p>
 
     </form>
-
+{{--<script>--}}
+{{--    function imageUpload(data)--}}
+{{--    {--}}
+{{--        alert(data.url);--}}
+{{--        return;--}}
+{{--        $('#image_thumbnail').val(data.image_thumbnail);--}}
+{{--        $('#image_origin').val(data.image_origin);--}}
+{{--        window.parent.CKEDITOR.tools.callFunction(data.CKEditorFuncNum, data.url, data.msg);--}}
+{{--    }--}}
+{{--</script>--}}
 
 @endsection
