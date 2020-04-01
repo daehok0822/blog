@@ -16,36 +16,38 @@ use Intervention\Image\Facades\Image;
 
 interface CutImage
 {
-    public function cut(): int;
+    public function cut(string $image): string;
 }
-class WidthBiggerThan300 implements cutImage{
+class WidthBiggerThan300 implements CutImage{
     public function cut($image): string{
         $thumbnail_img = Image::make($image)->widen(300);
         return $thumbnail_img;
     }
 }
-class HeightBiggerThan300 implements cutImage{
+class HeightBiggerThan300 implements CutImage{
     public function cut($image): string{
         $thumbnail_img = Image::make($image)->heighten(300);
         return $thumbnail_img;
     }
 }
-//class WidthAndHeightBiggerThan300 implements cutImage{
-//    public function cut($image): int{
-//        $thumbnail_img = Image::make($image)->crop(300, 300);
-//    }
-//}
-class WidthBiggerThan800 implements cutImage{
+class WidthBiggerThan800 implements CutImage{
     public function cut($image): string{
         $des_img = Image::make($image)->widen(800);
         return $des_img;
     }
 }
-
-interface CutImageFactory{
-    public function getImageSize();
+class ReturnOriginalImage implements CutImage
+{
+    public function cut($image): string
+    {
+        $original_image = $image;
+        return $original_image;
+    }
 }
-class SimpleCutImageFactory{
+interface CutImageFactory{
+    public function howImageCut(int $width, int $height);
+}
+class ThumbnailImageFactory implements CutImageFactory {
     public function howImageCut($width, $height){
         if($width > 300 || $height > 300){
             if($width > 300){
@@ -55,12 +57,19 @@ class SimpleCutImageFactory{
                 return new HeightBiggerThan300();
             }
         }else{
-            return
+            return new ReturnOriginalImage();
         }
+
+    }
+}
+class DescriptionImageFactory implements CutImageFactory
+{
+    public function howImageCut($width, $height)
+    {
         if($width > 800){
             return new WidthBiggerThan800();
         }else{
-            return
+            return new ReturnOriginalImage();
         }
     }
 }
@@ -72,7 +81,6 @@ class FrontArticleController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-
 
     public function index(Request $request)
     {
@@ -88,9 +96,6 @@ class FrontArticleController extends Controller
             $articleObj->where('category_id', $category_id);
         }
         $articles = $articleObj->orderBy('id', 'DESC')->paginate(20);
-
-
-
         return view('front.index', compact('articles', 'categories'));
 
     }
@@ -119,34 +124,17 @@ class FrontArticleController extends Controller
 
         preg_match_all("/<img[^>]*src=[\"']?([^>\"']+)[\"']?[^>]*>/i", $contents, $matches);
         $image = $matches[1];
+        var_dump($image);
         $width = Image::make($image)->width();
         $height = Image::make($image)->height();
-        $factory = new SimpleCutImageFactory();
-        $imagecut = $factory.howImageCut($width,$height);
-        $imagecut.cut($image);
 
+        $factory = new ThumbnailImageFactory();
+        $thumbnail_cut = $factory.howImageCut($width,$height);
+        $thumbnail_img = $thumbnail_cut.cut($image);
 
-
-//        if($width > 300 || $height > 300){
-//            if($width > 300){
-//                $thumbnail_img = Image::make($matches[1])->widen(300);
-//
-//            }
-//            if ($height > 300){
-//                $thumbnail_img = Image::make($matches[1])->heighten(300);
-//            }
-//        }else{
-//            $thumbnail_img = $image;
-//        }
-//        if($width > 800){
-//            $des_img = Image::make($matches[1])->widen(800);
-//        }else{
-//            $des_img = $image;
-//        }
-
-
-
-
+        $factory = new DescriptionImageFactory();
+        $des_cut = $factory.howImageCut($width,$height);
+        $des_img = $des_cut.cut($image);
 
         $articleInfo =[
             'title' => $request->input('title'),
