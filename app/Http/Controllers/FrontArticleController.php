@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Article;
 use App\Category;
 use App\Comment;
+use App\Image as ModelImage;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Gate;
@@ -59,7 +60,6 @@ class ThumbnailImageFactory implements CutImageFactory {
         }else{
             return new ReturnOriginalImage();
         }
-
     }
 }
 class DescriptionImageFactory implements CutImageFactory
@@ -108,7 +108,6 @@ class FrontArticleController extends Controller
     public function create()
     {
         $categories = Category::all();
-
         return view('front.article.write', compact('categories'));
     }
 
@@ -122,27 +121,40 @@ class FrontArticleController extends Controller
     {
         $contents = $request->input('description');
 
-        preg_match_all("/<img[^>]*src=[\"']?([^>\"']+)[\"']?[^>]*>/i", $contents, $matches);
-        $image = $matches[1];
-        var_dump($image);
-        $width = Image::make($image)->width();
-        $height = Image::make($image)->height();
-
-        $factory = new ThumbnailImageFactory();
-        $thumbnail_cut = $factory.howImageCut($width,$height);
-        $thumbnail_img = $thumbnail_cut.cut($image);
-
-        $factory = new DescriptionImageFactory();
-        $des_cut = $factory.howImageCut($width,$height);
-        $des_img = $des_cut.cut($image);
-
         $articleInfo =[
             'title' => $request->input('title'),
-            'description' => $request->input('description'),
+            'description' => $contents,
             'category_id' => $request->input('category'),
             'user_id' => Auth::id()
         ];
-        Article::create($articleInfo);
+        $article = Article::create($articleInfo);
+
+        $article_id = $article->id;
+
+        preg_match_all("/<img[^>]*src=[\"']?([^>\"']+)[\"']?[^>]*>/i", $contents, $matches);
+        var_dump($matches);
+        foreach ($matches as $image) {
+            $width = Image::make($image)->width();
+            $height = Image::make($image)->height();
+
+            $factory = new ThumbnailImageFactory();
+            $thumbnail_cut = $factory.howImageCut($width,$height);
+            $thumbnail_img = $thumbnail_cut.cut($image);
+
+            $factory = new DescriptionImageFactory();
+            $des_cut = $factory.howImageCut($width,$height);
+            $des_img = $des_cut.cut($image);
+
+
+            $imageInfo =[
+                'article_id' => $article_id,
+                'original_image' => $image,
+                'thumbnail_image' => $thumbnail_img,
+                'description_image' => $des_img,
+            ];
+            ModelImage::create($imageInfo);
+        }
+
         return Redirect::route('front.index');
     }
 
