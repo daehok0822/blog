@@ -33,8 +33,8 @@ class HeightBiggerThan300 implements CutImage{
 }
 class WidthBiggerThan800 implements CutImage{
     public function cut($image): string{
-        $des_img = Image::make($image)->widen(800);
-        return $des_img;
+        $desc_img = Image::make($image)->widen(800);
+        return $desc_img;
     }
 }
 class ReturnOriginalImage implements CutImage
@@ -133,24 +133,28 @@ class FrontArticleController extends Controller
 
         preg_match_all("/<img[^>]*src=[\"']?([^>\"']+)[\"']?[^>]*>/i", $contents, $matches);
         var_dump($matches);
-        foreach ($matches as $image) {
-            $width = Image::make($image)->width();
-            $height = Image::make($image)->height();
+        $app_url = config('app.url');
+        foreach ($matches[1] as $image) {
+
+            $image_path = str_replace($app_url . '/', '', $image);
+            $width = Image::make($image_path)->width();
+            $height = Image::make($image_path)->height();
 
             $factory = new ThumbnailImageFactory();
-            $thumbnail_cut = $factory.howImageCut($width,$height);
-            $thumbnail_img = $thumbnail_cut.cut($image);
+            var_dump($factory);
+            $thumbnail_cut = $factory->howImageCut($width,$height);
+            $thumbnail_img = $thumbnail_cut->cut($image_path);
 
             $factory = new DescriptionImageFactory();
-            $des_cut = $factory.howImageCut($width,$height);
-            $des_img = $des_cut.cut($image);
+            $desc_cut = $factory->howImageCut($width,$height);
+            $desc_img = $desc_cut->cut($image_path);
 
 
             $imageInfo =[
                 'article_id' => $article_id,
-                'original_image' => $image,
+                'original_image' => $image_path,
                 'thumbnail_image' => $thumbnail_img,
-                'description_image' => $des_img,
+                'description_image' => $desc_img,
             ];
             ModelImage::create($imageInfo);
         }
