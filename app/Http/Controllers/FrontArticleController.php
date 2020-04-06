@@ -6,6 +6,7 @@ use App\Article;
 use App\Category;
 use App\Comment;
 use App\Image as ModelImage;
+use App\File;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Gate;
@@ -102,10 +103,13 @@ class FrontArticleController extends Controller
         $searchWord = $request->input('searchWord');
         $category_id = $request->input('category_id');
 
+        $thumbnailImage = \App\Image::select('thumbnail_image', 'article_id')->where('thumbnail_image', '!=', "''");
+        $articleObj = Article::with(['user'])->leftJoinSub($thumbnailImage, 'thumbnail_image', function ($join) {
+            $join->on('articles.id', '=', 'thumbnail_image.article_id');
+        });
 
+        //$articleObj = Article::with(['user']);
 
-
-        $articleObj = Article::with(['user','image']); //
         $categories = Category::all();
         if (!empty($searchWord)) {
             $articleObj->articleSearch($searchWord);
@@ -114,6 +118,13 @@ class FrontArticleController extends Controller
             $articleObj->where('category_id', $category_id);
         }
         $articles = $articleObj->orderBy('id', 'DESC')->paginate(20);
+
+//        $thubmnailImage = [];
+//        foreach ($articles as $key => $article) {
+//             $thumb = \App\Image::where('article_id' , $article->id)
+//                ->where('thumbnail_image', '!=', '')->first();
+//            $thubmnailImage[$key] = $thumb->thumbnail_image ?? '';
+//        }
 
         return view('front.index', compact('articles', 'categories'));
 
@@ -140,6 +151,7 @@ class FrontArticleController extends Controller
     {
         $contents = $request->input('description');
 
+
         $articleInfo =[
             'title' => $request->input('title'),
             'description' => $contents,
@@ -149,6 +161,27 @@ class FrontArticleController extends Controller
         $article = Article::create($articleInfo);
 
         $article_id = $article->id;
+
+
+        if($request->hasFile('attachments[]')) {
+            foreach ($request->file('attachments[]') as $attachment) {
+                $originName = $attachment->getClientOriginalName();
+
+                //허용되는 확장자의 이미지인지 확인
+                $filename = $attachment->store(uploads/files);
+                File::create([
+                    'article_id' => $article_id,
+                    'name' => $filename
+                ]);
+
+
+
+            }
+            $originName = $request->file('attachments')->getClientOriginalName();
+        }
+
+
+
 
         preg_match_all("/<img[^>]*src=[\"']?([^>\"']+)[\"']?[^>]*>/i", $contents, $matches);
         $app_url = config('app.url');
@@ -168,13 +201,14 @@ class FrontArticleController extends Controller
             $desc_img_path = $desc_img->dirname . '/' . $desc_img->filename . '_800.' . $desc_img->extension;
             $desc_img->save($desc_img_path, 100);
 
-            $image_path = str_replace($image_path, $desc_img_path, $contents);
+
 
 
             if($image===$matches[1][0]){
                 $factory = new ThumbnailImageFactory();
                 $thumbnail_cut = $factory->howImageCut($width,$height);
                 $thumbnail_img = $thumbnail_cut->cut($image_path);
+                var_dump($image_path);
                 $thumbnail_img_path = $thumbnail_img->dirname  . '/' . $thumbnail_img->filename . '_300x300.' . $thumbnail_img->extension;
                 $thumbnail_img->save($thumbnail_img_path, 100);
 
@@ -194,6 +228,9 @@ class FrontArticleController extends Controller
                 ModelImage::create($imageInfo);
             }
         }
+        $description = str_replace($image_path, $desc_img_path, $contents);
+        $article->description = $description;
+        $article->update();
 
         return Redirect::route('front.index');
     }
@@ -209,8 +246,16 @@ class FrontArticleController extends Controller
         $article = Article::findOrFail($id);
         $categories = Category::all();
         $comments = Comment::where('article_id', $id)->get();
+        $images = \App\Image::where('article_id', $id)->get();
 
-        return view('front.article.frontShow', compact('article', 'categories', 'comments'));
+
+//        $originalimage = \App\Image::select('original_image', 'article_id')->where('original_image', '!=', "''");
+//        $image = Article::with(['user'])->leftJoinSub($originalimage, 'original_image', function ($join) {
+//            $join->on('articles.id', '=', 'original_image.article_id');
+//        });
+
+        //
+        return view('front.article.frontShow', compact('article', 'categories', 'comments', 'images'));
     }
 
     /**

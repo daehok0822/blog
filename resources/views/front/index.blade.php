@@ -13,12 +13,20 @@
         </tr>
         </thead>
         <tbody>
-        @foreach($articles as $article)
+        @foreach($articles as $key => $article)
             <tr role="row" class="odd">
-{{--                <td>{!! --}}
-{{--if(!empty($article->image->thumbnail_image)){--}}
-{{--        --}}
-{{--}!!}</td>--}}
+                <td>
+                    @if(!empty($article->thumbnail_image))
+
+                        <img src="{{$article->thumbnail_image}}" style="width:50px;">
+
+                    @else
+                        <img
+                            src="https://st2.depositphotos.com/1007566/11947/v/950/depositphotos_119474406-stock-illustration-page-document-file-article-icon.jpg"
+                            style="width:50px;">
+                    @endif
+
+                </td>
                 <td class="sorting_1">
                     <a href="{{ route('article.show', ['article' => $article]) }}">{{ $article->title }}</a>
                 </td>

@@ -113,4 +113,29 @@ class UserController extends Controller
             'id' => $id
         ]);
     }
+
+    public function excel()
+    {
+        $spreadsheet = new Spreadsheet();
+        $sheet = $spreadsheet->getActiveSheet();
+        $sheet->setCellValue('A1', '이름');
+        $sheet->setCellValue('B1', '이메일');
+        $sheet->setCellValue('C1', '가입일');
+        $writer = new Xlsx($spreadsheet);
+        $users = [];
+        foreach ($users as $key => $user)
+        {
+            $sheet->setCellValue('A' . $key, $user->name);
+            $sheet->setCellValue('B' . $key, $user->email);
+            $sheet->setCellValue('C' . $key, $user->date);
+        }
+        //$writer->save('hello_world.xlsx');
+
+        $filename = 'member_' . date("Y-m-d");
+
+        header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+        header('Content-Disposition: attachment; filename="'.$filename.'.xlsx"');
+
+        $writer->save('php://output');
+    }
 }
