@@ -13,7 +13,7 @@
 
 
 
-Route::group(['prefix' => 'admin', 'middleware' => ['auth']], function(){
+Route::group(['prefix' => 'admin', 'middleware' => ['auth', 'check.admin']], function(){
     Route::resource('article', 'AdminArticleController');
     Route::get('/user/excel', 'UserController@excel');
     Route::resource('user', 'UserController');
