@@ -29,15 +29,24 @@
     @include('front.article.comment')
 <script>
 
+
     var images = <?=json_encode($images)?>;
     var app_url = '<?= env('APP_URL') ?>';
-    console.log(app_url);
-    for (var i=0; i< images.length; i++) {
-        console.log(images[i].original_image);
-        $(document).on('click', 'img[src="' + app_url + '/' + images[i].description_image + '"]', function () {
-            console.log(images[i]);
-            window.open(app_url + '/' + images[i].original_image);
-        });
-    }
+    $(document).ready(function () {
+        for (var i=0; i< images.length; i++) {
+            $('img[src="' + app_url + '/' + images[i].description_image + '"]').attr('original_image', images[i].original_image);
+            $('img[src="' + app_url + '/' + images[i].description_image + '"]').click(function () {
+                window.open(app_url + '/' + $(this).attr('original_image'));
+            });
+        }
+    });
+
+    // for (var i=0; i< images.length; i++) {
+    //     console.log(images[i].original_image);
+    //     $(document).on('click', 'img[src="' + app_url + '/' + images[i].description_image + '"]', function () {
+    //         console.log(images[i]);
+    //         window.open(app_url + '/' + images[i].original_image);
+    //     });
+    // }
 </script>
 @endsection
