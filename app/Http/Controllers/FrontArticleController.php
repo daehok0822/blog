@@ -187,9 +187,7 @@ class FrontArticleController extends Controller
         $app_url = config('app.url');
 
 
-
-
-        foreach ($matches[1] as $image) {
+        foreach ($matches[1] as $key => $image) {
 
             $image_path = str_replace($app_url . '/', '', $image);
             $width = Image::make($image_path)->width();
@@ -202,31 +200,23 @@ class FrontArticleController extends Controller
             $desc_img->save($desc_img_path, 100);
 
 
+            $imageInfo =[
+                'article_id' => $article_id,
+                'original_image' => $image_path,
+                'description_image' => $desc_img_path,
+            ];
 
-
-            if($image===$matches[1][0]){
+            if($key === 0) {
                 $factory = new ThumbnailImageFactory();
                 $thumbnail_cut = $factory->howImageCut($width,$height);
                 $thumbnail_img = $thumbnail_cut->cut($image_path);
-                var_dump($image_path);
+
                 $thumbnail_img_path = $thumbnail_img->dirname  . '/' . $thumbnail_img->filename . '_300x300.' . $thumbnail_img->extension;
                 $thumbnail_img->save($thumbnail_img_path, 100);
 
-                $imageInfo =[
-                    'article_id' => $article_id,
-                    'original_image' => $image_path,
-                    'thumbnail_image' => $thumbnail_img_path,
-                    'description_image' => $desc_img_path,
-                ];
-                ModelImage::create($imageInfo);
-            }else{
-                $imageInfo =[
-                    'article_id' => $article_id,
-                    'original_image' => $image_path,
-                    'description_image' => $desc_img_path,
-                ];
-                ModelImage::create($imageInfo);
+                $imageInfo['thumbnail_image'] = $thumbnail_img_path;
             }
+            ModelImage::create($imageInfo);
         }
         $description = str_replace($image_path, $desc_img_path, $contents);
         $article->description = $description;
