@@ -20,15 +20,17 @@
         </select>
 {{--        <input type="hidden" name="image_thumbnail" id="image_thumbnail" >--}}
 {{--        <input type="hidden" name="image_origin" id="image_origin">--}}
-        <input type="file" id="file_attach" name="attachments[]"> <button type="button" onclick="add_attach_file()">파일 추가</button>
+        <input type="file" class="file-attach" name="attachments[]">
+        <input type="file" id="file_attach_init" name="attachments[]" style="display: none;">
+        <button type="button" id="file_add" onclick="add_attach_file()">파일 추가</button>
         <p><input type="submit"></p>
 
     </form>
     <script>
         function add_attach_file() {
-            var file_attach = $('#file_attach').clone();
-            file_attach.removeAttr('id');
-            $('#file_attach').after(file_attach);
+            var file_attach = $('#file_attach_init').clone();
+            file_attach.removeAttr('id').removeAttr("style");;
+            $('#file_add').before(file_attach);
         }
     </script>
 {{--<script>--}}

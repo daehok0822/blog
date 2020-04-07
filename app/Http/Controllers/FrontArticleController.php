@@ -92,6 +92,13 @@ class DescriptionImageFactory implements CutImageFactory
 
 class FrontArticleController extends Controller
 {
+    private $allowed_ext = ['doc', 'docx', 'png', 'pdf', 'jpg', 'jpeg', 'gif', 'hwp', 'ppt', 'pptx', 'xls', 'xlsx'];
+
+    public function __construct()
+    {
+        $this->middleware('auth', ['create']);
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -150,7 +157,14 @@ class FrontArticleController extends Controller
     public function store(Request $request)
     {
         $contents = $request->input('description');
-
+        $attachments = $request->file('attachments', []);
+        //허용되는 확장자의 이미지인지 확인
+        foreach ($attachments as $attachment) {
+            $ext = $attachment->extension();
+            if (!in_array($ext, $this->allowed_ext)) {
+                abort(400, '허용되지 않는 파일을 업로드했습니다.');
+            }
+        }
 
         $articleInfo =[
             'title' => $request->input('title'),
@@ -162,65 +176,57 @@ class FrontArticleController extends Controller
 
         $article_id = $article->id;
 
+        foreach ($attachments as $attachment) {
+            $filename = $attachment->store('uploads/files');
+            $originName = $attachment->getClientOriginalName();
+            File::create([
+                'article_id' => $article_id,
+                'name' => $filename,
+                'original_name' => $originName,
+            ]);
 
-        if($request->hasFile('attachments[]')) {
-            foreach ($request->file('attachments[]') as $attachment) {
-                $originName = $attachment->getClientOriginalName();
-
-                //허용되는 확장자의 이미지인지 확인
-                $filename = $attachment->store(uploads/files);
-                File::create([
-                    'article_id' => $article_id,
-                    'name' => $filename
-                ]);
-
-
-
-            }
-            $originName = $request->file('attachments')->getClientOriginalName();
         }
-
-
-
 
         preg_match_all("/<img[^>]*src=[\"']?([^>\"']+)[\"']?[^>]*>/i", $contents, $matches);
         $app_url = config('app.url');
 
+        if (!empty($matches[1])) {
+            foreach ($matches[1] as $key => $image) {
 
-        foreach ($matches[1] as $key => $image) {
+                $image_path = str_replace($app_url . '/', '', $image);
+                $width = Image::make($image_path)->width();
+                $height = Image::make($image_path)->height();
 
-            $image_path = str_replace($app_url . '/', '', $image);
-            $width = Image::make($image_path)->width();
-            $height = Image::make($image_path)->height();
-
-            $factory = new DescriptionImageFactory();
-            $desc_cut = $factory->howImageCut($width,$height);
-            $desc_img = $desc_cut->cut($image_path);
-            $desc_img_path = $desc_img->dirname . '/' . $desc_img->filename . '_800.' . $desc_img->extension;
-            $desc_img->save($desc_img_path, 100);
+                $factory = new DescriptionImageFactory();
+                $desc_cut = $factory->howImageCut($width,$height);
+                $desc_img = $desc_cut->cut($image_path);
+                $desc_img_path = $desc_img->dirname . '/' . $desc_img->filename . '_800.' . $desc_img->extension;
+                $desc_img->save($desc_img_path, 100);
 
 
-            $imageInfo =[
-                'article_id' => $article_id,
-                'original_image' => $image_path,
-                'description_image' => $desc_img_path,
-            ];
+                $imageInfo =[
+                    'article_id' => $article_id,
+                    'original_image' => $image_path,
+                    'description_image' => $desc_img_path,
+                ];
 
-            if($key === 0) {
-                $factory = new ThumbnailImageFactory();
-                $thumbnail_cut = $factory->howImageCut($width,$height);
-                $thumbnail_img = $thumbnail_cut->cut($image_path);
+                if($key === 0) {
+                    $factory = new ThumbnailImageFactory();
+                    $thumbnail_cut = $factory->howImageCut($width,$height);
+                    $thumbnail_img = $thumbnail_cut->cut($image_path);
 
-                $thumbnail_img_path = $thumbnail_img->dirname  . '/' . $thumbnail_img->filename . '_300x300.' . $thumbnail_img->extension;
-                $thumbnail_img->save($thumbnail_img_path, 100);
+                    $thumbnail_img_path = $thumbnail_img->dirname  . '/' . $thumbnail_img->filename . '_300x300.' . $thumbnail_img->extension;
+                    $thumbnail_img->save($thumbnail_img_path, 100);
 
-                $imageInfo['thumbnail_image'] = $thumbnail_img_path;
+                    $imageInfo['thumbnail_image'] = $thumbnail_img_path;
+                }
+                ModelImage::create($imageInfo);
             }
-            ModelImage::create($imageInfo);
+            $description = str_replace($image_path, $desc_img_path, $contents);
+            $article->description = $description;
+            $article->update();
         }
-        $description = str_replace($image_path, $desc_img_path, $contents);
-        $article->description = $description;
-        $article->update();
+
 
         return Redirect::route('front.index');
     }
