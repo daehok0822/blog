@@ -11,6 +11,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Redirect;
+use Illuminate\Support\Facades\Storage;
 use Intervention\Image\Facades\Image;
 
 
@@ -243,6 +244,7 @@ class FrontArticleController extends Controller
         $categories = Category::all();
         $comments = Comment::where('article_id', $id)->get();
         $images = \App\Image::where('article_id', $id)->get();
+        $files = \App\File::where('article_id', $id)->get();
 
 
 //        $originalimage = \App\Image::select('original_image', 'article_id')->where('original_image', '!=', "''");
@@ -251,7 +253,7 @@ class FrontArticleController extends Controller
 //        });
 
         //
-        return view('front.article.frontShow', compact('article', 'categories', 'comments', 'images'));
+        return view('front.article.frontShow', compact('article', 'categories', 'comments', 'images', 'files'));
     }
 
     /**
@@ -286,5 +288,11 @@ class FrontArticleController extends Controller
     public function destroy($id)
     {
         //
+    }
+
+    public function fileDownload($id)
+    {
+        $file = File::findOrFail($id);
+        return Storage::download($file->name, $file->original_name);
     }
 }

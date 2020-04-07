@@ -23,6 +23,7 @@ Route::group(['prefix' => 'admin', 'middleware' => ['auth', 'check.admin']], fun
     })->name('admin.index');
 });
 
+Route::get('/article/download/{id}', 'FrontArticleController@fileDownload')->name('front.filedown');
 Route::resource('article', 'FrontArticleController');
 Route::resource('comment', 'CommentController');
 
