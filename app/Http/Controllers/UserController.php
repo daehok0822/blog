@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
+use PhpOffice\PhpSpreadsheet\Spreadsheet;
+use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 
 class UserController extends Controller
 {
@@ -122,12 +124,13 @@ class UserController extends Controller
         $sheet->setCellValue('B1', '이메일');
         $sheet->setCellValue('C1', '가입일');
         $writer = new Xlsx($spreadsheet);
-        $users = [];
+        $users = User::all();
         foreach ($users as $key => $user)
         {
+            $key = $key + 2;
             $sheet->setCellValue('A' . $key, $user->name);
             $sheet->setCellValue('B' . $key, $user->email);
-            $sheet->setCellValue('C' . $key, $user->date);
+            $sheet->setCellValue('C' . $key, $user->created_at);
         }
         //$writer->save('hello_world.xlsx');
 

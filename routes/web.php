@@ -13,9 +13,9 @@
 
 
 
-Route::group(['prefix' => 'admin', 'middleware' => ['auth']], function(){
+Route::group(['prefix' => 'admin', 'middleware' => ['auth'],['check']], function(){
     Route::resource('article', 'AdminArticleController');
-    Route::get('/user/excel', 'UserController@excel');
+    Route::get('/user/excel', 'UserController@excel')->name('admin.user.excel');
     Route::resource('user', 'UserController');
 
     Route::get('/', function() { // 이게 blog.test/admin/ 이 되는 거여

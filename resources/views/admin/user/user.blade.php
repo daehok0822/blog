@@ -70,6 +70,7 @@
     </script>
 @endsection
 
+    <a href="{{route('admin.user.excel')}}">엑셀로 다운로드</a>
 
     <table class="table table-hover">
         <thead>
@@ -117,4 +118,4 @@
     </form>
 
 
-@stop
+@endsection
