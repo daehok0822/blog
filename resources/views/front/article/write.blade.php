@@ -4,10 +4,10 @@
 
     <form action="{{ route('article.store' )}}" method="post" enctype="multipart/form-data">
         @csrf
-        <input type="text" name="title" placeholder="제목"></p>
-        <textarea name="description" id="editor1" name="editor1" rows="10" cols="80"></textarea>
+        <input id="title" type="text" name="title" placeholder="제목"></p>
+        <textarea name="description" id="editor1" rows="10" cols="80"></textarea>
         <script>
-            CKEDITOR.replace('editor1', {
+            var editor = CKEDITOR.replace('editor1', {
                 filebrowserUploadUrl: "{{route('ckeditor.upload', ['_token' => csrf_token() ])}}",
                 filebrowserUploadMethod: 'form'
             });
@@ -30,6 +30,28 @@
             var file_attach = $('#file_attach').clone();
             file_attach.removeAttr('id').removeAttr('style');
             $('#add_button').before(file_attach);
+        }
+    </script>
+
+    <script>
+        function CheckForm() {
+            if($('#title').val() == ''){
+                alert('제목을 입력하세요.');
+                $('#title').focus();
+                return false;
+            }
+            var desc = editor.getData();
+            if (desc == '') {
+                alert('본문을 입력하세요.');
+                editor.focus();
+                return false;
+            }
+            if ($('#category').val() == '0') {
+                alert('카테고리를 선택하세요.');
+                $('#category').focus();
+                return false;
+            }
+            return true;
         }
     </script>
 {{--<script>--}}

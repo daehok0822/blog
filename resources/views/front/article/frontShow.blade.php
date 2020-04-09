@@ -5,6 +5,11 @@
     글쓴이: {{$article->user->name}} |
     작성일: {{$article->created_at}} | 최근 수정일: {{$article->updated_at}}
     <p>{!! $article->description !!}</p>
+    <ul>
+        @foreach($files as $file)
+            <li><a href="{{ route('front.filedown', ['id' => $file->id]) }}">{{ $file->original_name }}</a></li>
+        @endforeach
+    </ul>
     @include('front.article.comment')
 <script>
 

@@ -13,7 +13,7 @@
 
 
 
-Route::group(['prefix' => 'admin', 'middleware' => ['auth'],['check']], function(){
+Route::group(['prefix' => 'admin', 'middleware' => ['auth', 'check']], function(){
     Route::resource('article', 'AdminArticleController');
     Route::get('/user/excel', 'UserController@excel')->name('admin.user.excel');
     Route::resource('user', 'UserController');
@@ -28,7 +28,7 @@ Route::resource('comment', 'CommentController');
 
 Auth::routes();
 
-
+Route::get('/article/download/{id}', 'FrontArticleController@fileDownload')->name('front.filedown');
 Route::get('/', 'IndexController@index')->name('front.index');
 Route::post('ckeditor/upload', 'CkeditorController@upload')->name('ckeditor.upload');
 //Route::get('/view/{id}', 'ArticleController@frontShow')->name('article.frontShow');
