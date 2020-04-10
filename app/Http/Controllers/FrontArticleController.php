@@ -11,6 +11,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Redirect;
+use Illuminate\Support\Facades\Storage;
 use Intervention\Image\Facades\Image;
 
 
@@ -118,6 +119,9 @@ class FrontArticleController extends Controller
         $categories = Category::all();
         if (!empty($searchWord)) {
             $articleObj->articleSearch($searchWord);
+        }else{
+            abort(400, '검색어를 입력해 주세요');
+            return view('front.index');
         }
         if (!empty($category_id)) {
             $articleObj->where('category_id', $category_id);
@@ -159,7 +163,13 @@ class FrontArticleController extends Controller
     {
         $contents = $request->input('description');
 
-
+        $attachments = $request->file('attachments', []);
+        foreach ($attachments as $attachment) {
+            $ext = $attachment->extension();
+            if (!in_array($ext, $this->allowed_ext)) {
+                abort(400, '허용되지 않는 파일을 업로드했습니다.');
+            }
+        }
         $articleInfo = [
             'title' => $request->input('title'),
             'description' => $contents,
@@ -167,19 +177,7 @@ class FrontArticleController extends Controller
             'user_id' => Auth::id()
         ];
         $article = Article::create($articleInfo);
-
         $article_id = $article->id;
-
-
-        $attachments = $request->file('attachments', []);
-        //허용되는 확장자의 이미지인지 확인
-        foreach ($attachments as $attachment) {
-            $ext = $attachment->extension();
-            if (!in_array($ext, $this->allowed_ext)) {
-                abort(400, '허용되지 않는 파일을 업로드했습니다.');
-            }
-        }
-
 
         foreach ($attachments as $attachment) {
             $filename = $attachment->store('uploads/files');
@@ -189,55 +187,51 @@ class FrontArticleController extends Controller
                 'name' => $filename,
                 'original_name' => $originName,
             ]);
-
+        }
 
             preg_match_all("/<img[^>]*src=[\"']?([^>\"']+)[\"']?[^>]*>/i", $contents, $matches);
             $app_url = config('app.url');
 
 
-            foreach ($matches[1] as $image) {
-
-                $image_path = str_replace($app_url . '/', '', $image);
-                $width = Image::make($image_path)->width();
-                $height = Image::make($image_path)->height();
-
-                $factory = new DescriptionImageFactory();
-                $desc_cut = $factory->howImageCut($width, $height);
-                $desc_img = $desc_cut->cut($image_path);
-                $desc_img_path = $desc_img->dirname . '/' . $desc_img->filename . '_800.' . $desc_img->extension;
-                $desc_img->save($desc_img_path, 100);
+            if (!empty($matches[1])) { //본문의 오리지널 이미지가 있다면
+                foreach ($matches[1] as $key => $image) {
+                    $image_path = str_replace($app_url . '/', '', $image);
+                    $width = Image::make($image_path)->width();
+                    $height = Image::make($image_path)->height();
 
 
-                if ($image === $matches[1][0]) {
-                    $factory = new ThumbnailImageFactory();
-                    $thumbnail_cut = $factory->howImageCut($width, $height);
-                    $thumbnail_img = $thumbnail_cut->cut($image_path);
-                    var_dump($image_path);
-                    $thumbnail_img_path = $thumbnail_img->dirname . '/' . $thumbnail_img->filename . '_300x300.' . $thumbnail_img->extension;
-                    $thumbnail_img->save($thumbnail_img_path, 100);
+                    $factory = new DescriptionImageFactory();
+                    $desc_cut = $factory->howImageCut($width,$height);
+                    $desc_img = $desc_cut->cut($image_path);
+                    $desc_img_path = $desc_img->dirname . '/' . $desc_img->filename . '_800.' . $desc_img->extension;
+                    $desc_img->save($desc_img_path, 100);
 
-                    $imageInfo = [
-                        'article_id' => $article_id,
-                        'original_image' => $image_path,
-                        'thumbnail_image' => $thumbnail_img_path,
-                        'description_image' => $desc_img_path,
-                    ];
-                    ModelImage::create($imageInfo);
-                } else {
-                    $imageInfo = [
+
+                    $imageInfo =[
                         'article_id' => $article_id,
                         'original_image' => $image_path,
                         'description_image' => $desc_img_path,
                     ];
+
+                    if($key === 0) {
+                        $factory = new ThumbnailImageFactory();
+                        $thumbnail_cut = $factory->howImageCut($width,$height);
+                        $thumbnail_img = $thumbnail_cut->cut($image_path);
+                        $thumbnail_img_path = $thumbnail_img->dirname  . '/' . $thumbnail_img->filename . '_300x300.' . $thumbnail_img->extension;
+                        $thumbnail_img->save($thumbnail_img_path, 100);
+                        $imageInfo['thumbnail_image'] = $thumbnail_img_path;
+
+                    }
                     ModelImage::create($imageInfo);
+
                 }
-            }
-            $description = str_replace($image_path, $desc_img_path, $contents);
-            $article->description = $description;
-            $article->update();
+                $description = str_replace($image_path, $desc_img_path, $contents);
+                $article->description = $description;
+                $article->update();
 
-            return Redirect::route('front.index');
+
         }
+        return Redirect::route('front.index');
     }
 
     /**
@@ -259,7 +253,7 @@ class FrontArticleController extends Controller
 //            $join->on('articles.id', '=', 'original_image.article_id');
 //        });
 
-        //
+
         return view('front.article.frontShow', compact('article', 'categories', 'comments', 'images', 'files'));
     }
 
