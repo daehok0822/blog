@@ -35,16 +35,11 @@
                     $('.popup').hide();
                 });
                 $(document).on('click', 'img', function () {
-                    console.log(2);
                     $('.popup').show();
                 });
 
 
-                if ($('.popup').is(":visible")) {
-                    console.log('안녕');
-                }else{
-                    console.log('하세요');
-                }
+
             }
         });
     </script>

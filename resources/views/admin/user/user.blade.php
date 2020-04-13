@@ -16,14 +16,11 @@
 
                 var user_name = $(this).attr('data-name');
                 var user_email = $(this).attr('data-email');
-                // var user_password = $(this).data('password');
 
                 $( 'input#name' ).val( user_name );
                 $( 'input#email' ).val( user_email );
 
-                // $( '#password' ).attr( 'value', 'user_password' );
 
-                $("#modify_form").attr('action', '/admin/user/' + user_id);
                 $("#modify_form").show();
             });
 
@@ -33,6 +30,7 @@
                 $("#delete_form").show();
             });
 
+
             $("#modify_form").submit(function (e) {
                 e.preventDefault();
                 var name = $(this).find('input[name="name"]').val();
@@ -41,10 +39,8 @@
                 var url = $(this).attr('action');
                 $.post(url, $(this).serialize(),
                     function (data) {
-                        console.log(data.result);
                         if(data.result=='실패'){
                             alert('아이디나 이메일을 입력해 주세요')
-
                         }else{
                             alert('변경되었습니다')
                             $('#user_name_' + data.id).text(name);
@@ -53,8 +49,6 @@
                             $('#user_data_' + data.id).attr('data-email', email);
                             $("#modify_form").hide();
                         }
-
-
                     }, "json");
             });
             $("#delete_form").submit(function (e) {
@@ -67,10 +61,42 @@
                     }, "json");
             })
         });
+
+        $("#add_form").hide();
+        $('#addButton').click(function (e) {
+            $("#add_form").show();
+        });
+        $("#add_form").submit(function (e) {
+            e.preventDefault();
+            var url = $(this).attr('action');
+            $.post(url, $(this).serialize(),
+                function (data) {
+                    if(data.result=='실패'){
+                        alert('값을 모두 입력하세요');
+                    }else{
+                        alert('추가되었습니다');
+                        $user = data.user;
+
+                        $( 'tbody' ).append( "" );
+                        $("#add_form").hide();
+                    }
+                }, "json");
+        });
     </script>
 @endsection
 
     <a href="{{route('admin.user.excel')}}">엑셀로 다운로드</a>
+
+<a id="addButton" type="button" class="btn btn-block btn-default">추가</a>
+
+<form id="add_form" action="{{ route('user.store')}}"
+      method="post">
+    @csrf
+    <input  type="text" name="name" placeholder="이름" >
+    <input  type="email" name="email" placeholder="이메일">
+    <input  type="password" name="password" placeholder="비밀번호">
+    <p><input type="submit" value="추가"></p>
+</form>
 
     <table class="table table-hover">
         <thead>
@@ -90,6 +116,7 @@
                 <td>{{$user->created_at}}</td>
                 <td>
                     <div id="buttons_{{ $user->id }}">
+
                         <a class="modifyButton" id="user_data_{{ $user->id }}" data-id="{{ $user->id }}" data-name="{{$user->name}}"
                            data-email="{{$user->email}}" type="button"
                            class="btn btn-block btn-default">수정</a>

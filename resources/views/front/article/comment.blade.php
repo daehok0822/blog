@@ -52,21 +52,36 @@
         })
     });
 </script>
-
-<form role="form" action="{{ route('comment.store')}}" method="post">
+<script>
+    function checkForm() {
+        if($('#nickname').val() == ''){
+            alert('닉네임을 입력하세요.');
+            $('#nickname').focus();
+            return false;
+        }
+        if ($('#text').val() == '') {
+            alert('내용을 입력하세요.');
+            $('#text').focus();
+            return false;
+        }
+        if ($('#password').val() == '') {
+            alert('비밀번호를 입력하세요.');
+            $('#password').focus();
+            return false;
+        }
+        return true;
+    }
+</script>
+<form role="form" action="{{ route('comment.store')}}" method="post" onsubmit="return checkForm()">
     @csrf
     <input type="hidden" name="article_id" value="{{ $article->id }}">
-{{--    <input type="text" name="nickname" placeholder="닉네임"></p>--}}
-{{--    <input type="text" name="password" placeholder="비밀번호"></p>--}}
-{{--    <p><textarea name="description"></textarea></p>--}}
-{{--    <p><input type="submit" name="댓글쓰기"></p>--}}
     <div class="row">
         <div class="form-group col-xs-3">
-            <input type="text" name="nickname" class="form-control" placeholder="닉네임">
-            <input type="text" name="password" class="form-control" placeholder="비밀번호">
+            <input id="nickname" type="text" name="nickname" class="form-control" placeholder="닉네임">
+            <input id="password" type="text" name="password" class="form-control" placeholder="비밀번호">
         </div>
         <div class="form-group col-xs-5">
-            <textarea class="form-control" rows="3" name="description" placeholder="Enter ..."></textarea>
+            <textarea id="text" class="form-control" rows="3" name="description" placeholder="Enter ..."></textarea>
             <input class="fa-pull-right" type="submit" name="댓글쓰기">
         </div>
     </div>

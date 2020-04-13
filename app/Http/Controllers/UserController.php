@@ -29,7 +29,7 @@ class UserController extends Controller
      */
     public function create()
     {
-        //
+
     }
 
     /**
@@ -40,7 +40,33 @@ class UserController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        if(empty($request->input('name'))){
+            return response()->json([
+                'result' => '실패',
+            ]);
+        }
+        if(empty($request->input('email'))){
+            return response()->json([
+                'result' => '실패',
+            ]);
+        }
+        if(empty($request->input('password'))){
+            return response()->json([
+                'result' => '실패',
+            ]);
+        }
+
+        $userInfo =[
+            'name' => $request->input('name'),
+            'email' => $request->input('email'),
+            'password' => $request->input('password'),
+            'isAdmin' => true
+        ];
+        $user = User::create($userInfo);
+        return response()->json([
+            'result' => '생성되었습니다',
+            'user' => $user
+        ]);
     }
 
     /**

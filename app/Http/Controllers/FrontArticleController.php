@@ -248,11 +248,6 @@ class FrontArticleController extends Controller
         $images = \App\Image::where('article_id', $id)->get();
         $files = \App\File::where('article_id', $id)->get();
 
-//        $originalimage = \App\Image::select('original_image', 'article_id')->where('original_image', '!=', "''");
-//        $image = Article::with(['user'])->leftJoinSub($originalimage, 'original_image', function ($join) {
-//            $join->on('articles.id', '=', 'original_image.article_id');
-//        });
-
 
         return view('front.article.frontShow', compact('article', 'categories', 'comments', 'images', 'files'));
     }
