@@ -6,6 +6,7 @@ use App\Comment;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Redirect;
+use App\Http\Requests\StoreBlogComment;
 
 class CommentController extends Controller
 {
@@ -36,8 +37,10 @@ class CommentController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(StoreBlogComment $request)
     {
+        $validated = $request->validated();
+
         $commentInfo =[
             'nickname' => $request->input('nickname'),
             'description' => $request->input('description'),

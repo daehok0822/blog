@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Article;
 use App\Category;
 use App\Comment;
+use App\Http\Requests\StoreBlogArticle;
 use App\Image as ModelImage;
 use App\File;
 use Illuminate\Http\Request;
@@ -159,8 +160,39 @@ class FrontArticleController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(StoreBlogArticle $request)
     {
+        $validated = $request->validated();
+
+        $captcha = $_POST['g-recaptcha'];
+        $secretKey = '6LdaW-kUAAAAAFyuUN1xfnxlThqHvml3LGXcOpno'; // 위에서 발급 받은 "비밀 키"를 넣어줍니다.
+        $ip = $_SERVER['REMOTE_ADDR']; // 옵션값으로 안 넣어도 됩니다.
+
+        $data = array(
+            'secret' => $secretKey,
+            'response' => $captcha,
+            'remoteip' => $ip  // ip를 안 넣을거면 여기서도 빼줘야죠
+        );
+
+        $url = "https://www.google.com/recaptcha/api/siteverify";
+        $ch = curl_init();
+        curl_setopt($ch, CURLOPT_URL, $url);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 10);
+        curl_setopt($ch, CURLOPT_POSTFIELDS, $data);
+        $response = curl_exec($ch);
+        curl_close($ch);
+
+        $responseKeys = json_decode($response, true);
+
+        if ($responseKeys["success"]) {
+        } else {
+            exit;
+        }
+
+
+
+
         $contents = $request->input('description');
 
         $attachments = $request->file('attachments', []);
@@ -203,7 +235,8 @@ class FrontArticleController extends Controller
                     $factory = new DescriptionImageFactory();
                     $desc_cut = $factory->howImageCut($width,$height);
                     $desc_img = $desc_cut->cut($image_path);
-                    $desc_img_path = $desc_img->dirname . '/' . $desc_img->filename . '_800.' . $desc_img->extension;
+                    $date = date("Y-m" );
+                    $desc_img_path = $desc_img->dirname . '/' .$date. '/' . $desc_img->filename . '_800.' . $desc_img->extension;
                     $desc_img->save($desc_img_path, 100);
 
 
@@ -217,7 +250,7 @@ class FrontArticleController extends Controller
                         $factory = new ThumbnailImageFactory();
                         $thumbnail_cut = $factory->howImageCut($width,$height);
                         $thumbnail_img = $thumbnail_cut->cut($image_path);
-                        $thumbnail_img_path = $thumbnail_img->dirname  . '/' . $thumbnail_img->filename . '_300x300.' . $thumbnail_img->extension;
+                        $thumbnail_img_path = $thumbnail_img->dirname  . '/' .$date. '/' . $thumbnail_img->filename . '_300x300.' . $thumbnail_img->extension;
                         $thumbnail_img->save($thumbnail_img_path, 100);
                         $imageInfo['thumbnail_image'] = $thumbnail_img_path;
 

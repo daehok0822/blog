@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\StoreBlogArticle;
 use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
@@ -38,24 +39,9 @@ class UserController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(StoreBlogArticle $request)
     {
-        if(empty($request->input('name'))){
-            return response()->json([
-                'result' => '실패',
-            ]);
-        }
-        if(empty($request->input('email'))){
-            return response()->json([
-                'result' => '실패',
-            ]);
-        }
-        if(empty($request->input('password'))){
-            return response()->json([
-                'result' => '실패',
-            ]);
-        }
-
+        $validated = $request->validated();
         $userInfo =[
             'name' => $request->input('name'),
             'email' => $request->input('email'),
@@ -64,7 +50,6 @@ class UserController extends Controller
         ];
         $user = User::create($userInfo);
         return response()->json([
-            'result' => '생성되었습니다',
             'user' => $user
         ]);
     }

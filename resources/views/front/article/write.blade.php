@@ -1,6 +1,7 @@
 @extends('front.layout')
 @section('articles')
     <script src="https://cdn.ckeditor.com/4.14.0/standard/ckeditor.js"></script>
+    <script src="https://www.google.com/recaptcha/api.js?render=6LdaW-kUAAAAABZ7-zrVak0baJp1e5-CSAUjRCeJ"></script>
 
     <form action="{{ route('article.store' )}}" method="post" enctype="multipart/form-data" onsubmit="return checkForm()">
         @csrf
@@ -25,9 +26,20 @@
         <button id='add_button'type="button" onclick="add_attach_file()">파일 추가</button>
         <p><input type="submit"></p>
 
+        <input type="hidden" id="g-recaptcha" name="g-recaptcha">
     </form>
+
+    <script type="text/javascript">
+        grecaptcha.ready(function() {
+            grecaptcha.execute('6LdaW-kUAAAAABZ7-zrVak0baJp1e5-CSAUjRCeJ', {action: 'homepage'}).then(function(token) {
+                // 토큰을 받아다가 g-recaptcha 에다가 값을 넣어줍니다.
+                document.getElementById('g-recaptcha').value = token;
+            });
+        });
+    </script>
+
     <script>
-        $fileCount = 1;
+        var fileCount = 1;
         function add_attach_file() {
             if($fileCount >= 5){
                 alert('파일은 총 5개까지 업로드 가능합니다.');

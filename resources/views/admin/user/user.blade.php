@@ -61,7 +61,24 @@
                     }, "json");
             })
         });
-
+        function checkForm() {
+            if($('#name').val() == ''){
+                alert('이름을 입력하세요.');
+                $('#name').focus();
+                return false;
+            }
+            if ($('#email')) {
+                alert('이메일을 입력하세요.');
+                ($('#email')).focus();
+                return false;
+            }
+            if ($('#password').val() == '0') {
+                alert('비밀번호를 입력하세요.');
+                $('#password').focus();
+                return false;
+            }
+            return true;
+        }
         $("#add_form").hide();
         $('#addButton').click(function (e) {
             $("#add_form").show();
@@ -71,15 +88,12 @@
             var url = $(this).attr('action');
             $.post(url, $(this).serialize(),
                 function (data) {
-                    if(data.result=='실패'){
-                        alert('값을 모두 입력하세요');
-                    }else{
                         alert('추가되었습니다');
                         $user = data.user;
 
                         $( 'tbody' ).append( "" );
                         $("#add_form").hide();
-                    }
+
                 }, "json");
         });
     </script>
@@ -129,7 +143,7 @@
         </tbody>
     </table>
     <form id="modify_form" action="{{ route('user.update',['user' => $user])}}"
-          method="post">
+          method="post"  onsubmit="return checkForm()">
         @csrf
         <input type="hidden" name="_method" value="PUT">
         <input id="name" type="text" name="name" placeholder="이름" >
