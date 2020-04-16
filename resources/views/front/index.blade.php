@@ -10,6 +10,7 @@
             <th rowspan="1" colspan="1">제목</th>
             <th rowspan="1" colspan="1">글쓴이</th>
             <th rowspan="1" colspan="1">작성일</th>
+            <th rowspan="1" colspan="1"></th>
         </tr>
         </thead>
         <tbody>
@@ -32,6 +33,10 @@
                 </td>
                 <td>{{$article->user->name}}</td>
                 <td>{{$article->created_at}}</td>
+                <td>
+                        <a class="btn btn-block btn-default">수정</a>
+                        <a class="btn btn-block btn-default">삭제</a>
+                </td>
             </tr>
         @endforeach
     </table>
