@@ -2,8 +2,8 @@
 @section('articles')
     <script src="https://cdn.ckeditor.com/4.14.0/standard/ckeditor.js"></script>
     <script src="https://www.google.com/recaptcha/api.js?render=6LdaW-kUAAAAABZ7-zrVak0baJp1e5-CSAUjRCeJ"></script>
-
-    <form action="{{ route('article.store' )}}" method="post" enctype="multipart/form-data" onsubmit="return checkForm()">
+{{--    onsubmit="return checkForm()"--}}
+    <form action="{{ route('article.store' )}}" method="post" enctype="multipart/form-data" >
         @csrf
         <input id="title" type="text" name="title" placeholder="제목"></p>
         <textarea name="description" id="editor1" rows="10" cols="80"></textarea>
@@ -19,8 +19,6 @@
                 <option value="{{$category -> id}}">{{$category -> name}}</option>
             @endforeach
         </select>
-{{--        <input type="hidden" name="image_thumbnail" id="image_thumbnail" >--}}
-{{--        <input type="hidden" name="image_origin" id="image_origin">--}}
         <input type="file" data="" id="file_attach" name="attachments[]" style="display: none;">
         <input type="file" name="attachments[]">
         <button id='add_button'type="button" onclick="add_attach_file()">파일 추가</button>
