@@ -15,10 +15,12 @@ class CkeditorController extends Controller
             $extension = $request->file('upload')->getClientOriginalExtension();
             $fileName = $fileName.'_'.time().'.'.$extension;
 
-            $request->file('upload')->move(public_path('uploads/images'), $fileName);
+            $date = date("Y-m" );
+            $request->file('upload')->move(public_path('uploads/images/'.$date), $fileName);
 
             $CKEditorFuncNum = $request->input('CKEditorFuncNum');
-            $url = asset('uploads/images/'.$fileName);
+
+            $url = asset('uploads/images/'.$date.'/'.$fileName);
 
 
             $msg = 'Image uploaded successfully';

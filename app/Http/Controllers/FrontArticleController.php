@@ -160,9 +160,9 @@ class FrontArticleController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(StoreBlogArticle $request)
+    public function store(Request $request)
     {
-        $validated = $request->validated();
+//        $validated = $request->validated();
 
         $captcha = $_POST['g-recaptcha'];
         $secretKey = '6LdaW-kUAAAAAFyuUN1xfnxlThqHvml3LGXcOpno'; // 위에서 발급 받은 "비밀 키"를 넣어줍니다.
@@ -190,11 +190,9 @@ class FrontArticleController extends Controller
             exit;
         }
 
-
-
-
         $contents = $request->input('description');
 
+        //허용되는 확장자인지
         $attachments = $request->file('attachments', []);
         foreach ($attachments as $attachment) {
             $ext = $attachment->extension();
@@ -202,6 +200,7 @@ class FrontArticleController extends Controller
                 abort(400, '허용되지 않는 파일을 업로드했습니다.');
             }
         }
+        //디비에 글 저장하기
         $articleInfo = [
             'title' => $request->input('title'),
             'description' => $contents,
@@ -210,9 +209,11 @@ class FrontArticleController extends Controller
         ];
         $article = Article::create($articleInfo);
         $article_id = $article->id;
+        $date = date("Y-m" );
 
+        //디비에 파일 저장하기
         foreach ($attachments as $attachment) {
-            $filename = $attachment->store('uploads/files');
+            $filename = $attachment->store('uploads/files/'.$date);
             $originName = $attachment->getClientOriginalName();
             File::create([
                 'article_id' => $article_id,
@@ -225,18 +226,18 @@ class FrontArticleController extends Controller
             $app_url = config('app.url');
 
 
-            if (!empty($matches[1])) { //본문의 오리지널 이미지가 있다면
+            if (!empty($matches[1])) {  //본문에 사진이 포함되었을 경우
                 foreach ($matches[1] as $key => $image) {
                     $image_path = str_replace($app_url . '/', '', $image);
                     $width = Image::make($image_path)->width();
                     $height = Image::make($image_path)->height();
 
 
-                    $factory = new DescriptionImageFactory();
+                    $factory = new DescriptionImageFactory(); //본문이미지 크기로 저장
                     $desc_cut = $factory->howImageCut($width,$height);
                     $desc_img = $desc_cut->cut($image_path);
                     $date = date("Y-m" );
-                    $desc_img_path = $desc_img->dirname . '/' .$date. '/' . $desc_img->filename . '_800.' . $desc_img->extension;
+                    $desc_img_path = $desc_img->dirname . '/' . $desc_img->filename . '_800.' . $desc_img->extension;
                     $desc_img->save($desc_img_path, 100);
 
 
@@ -247,10 +248,10 @@ class FrontArticleController extends Controller
                     ];
 
                     if($key === 0) {
-                        $factory = new ThumbnailImageFactory();
+                        $factory = new ThumbnailImageFactory(); //썸네일 이미지 저장
                         $thumbnail_cut = $factory->howImageCut($width,$height);
                         $thumbnail_img = $thumbnail_cut->cut($image_path);
-                        $thumbnail_img_path = $thumbnail_img->dirname  . '/' .$date. '/' . $thumbnail_img->filename . '_300x300.' . $thumbnail_img->extension;
+                        $thumbnail_img_path = $thumbnail_img->dirname  . '/' . $thumbnail_img->filename . '_300x300.' . $thumbnail_img->extension;
                         $thumbnail_img->save($thumbnail_img_path, 100);
                         $imageInfo['thumbnail_image'] = $thumbnail_img_path;
 
@@ -258,7 +259,7 @@ class FrontArticleController extends Controller
                     ModelImage::create($imageInfo);
 
                 }
-                $description = str_replace($image_path, $desc_img_path, $contents);
+                $description = str_replace($image_path, $desc_img_path, $contents); //본문 크기 이미지로 대체
                 $article->description = $description;
                 $article->update();
 
