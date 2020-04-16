@@ -129,13 +129,6 @@ class FrontArticleController extends Controller
         }
         $articles = $articleObj->orderBy('id', 'DESC')->paginate(20);
 
-//        $thubmnailImage = [];
-//        foreach ($articles as $key => $article) {
-//             $thumb = \App\Image::where('article_id' , $article->id)
-//                ->where('thumbnail_image', '!=', '')->first();
-//            $thubmnailImage[$key] = $thumb->thumbnail_image ?? '';
-//        }
-
         return view('front.index', compact('articles', 'categories'));
 
     }
@@ -160,9 +153,9 @@ class FrontArticleController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(StoreBlogArticle $request)
     {
-//        $validated = $request->validated();
+        $validated = $request->validated();
 
         $captcha = $_POST['g-recaptcha'];
         $secretKey = '6LdaW-kUAAAAAFyuUN1xfnxlThqHvml3LGXcOpno'; // 위에서 발급 받은 "비밀 키"를 넣어줍니다.
