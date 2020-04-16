@@ -106,7 +106,7 @@
 <a id="addButton" type="button" class="btn btn-block btn-default">추가</a>
 
 <form id="add_form" action="{{ route('user.store')}}"
-      method="post">
+      method="post" onsubmit="return checkForm()">
     @csrf
     <input  type="text" name="name" placeholder="이름" >
     <input  type="email" name="email" placeholder="이메일">

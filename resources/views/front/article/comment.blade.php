@@ -72,6 +72,7 @@
         return true;
     }
 </script>
+
 <form role="form" action="{{ route('comment.store')}}" method="post" onsubmit="return checkForm()">
     @csrf
     <input type="hidden" name="article_id" value="{{ $article->id }}">
@@ -105,7 +106,7 @@
                 </tbody>
             </table>
 
-            <form id="modify_form_{{ $comment->id }}" class="modify_form" action="{{ route('comment.update',['comment' => $comment])}}" method="post">
+            <form id="modify_form_{{ $comment->id }}" class="modify_form" action="{{ route('comment.update',['comment' => $comment])}}" method="post" onsubmit="return checkForm()">
                 @csrf
                 <input type="hidden" name="_method" value="PUT">
                 <input type="hidden" name="article_id" value="{{ $article->id }}">

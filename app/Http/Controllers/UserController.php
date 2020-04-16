@@ -84,8 +84,9 @@ class UserController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(StoreBlogUser $request, $id)
     {
+        $validated = $request->validated();
         $user = User::find($id);
         if(empty($request->input('name'))){
             return response()->json([

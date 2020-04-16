@@ -84,8 +84,9 @@ class CommentController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(StoreBlogComment $request, $id)
     {
+        $validated = $request->validated();
         $comment = Comment::find($id);
         if (Hash::check($request->input('password'), $comment->password)) {
             $comment->description = $request->input('description');

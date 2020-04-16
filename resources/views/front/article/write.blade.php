@@ -2,8 +2,7 @@
 @section('articles')
     <script src="https://cdn.ckeditor.com/4.14.0/standard/ckeditor.js"></script>
     <script src="https://www.google.com/recaptcha/api.js?render=6LdaW-kUAAAAABZ7-zrVak0baJp1e5-CSAUjRCeJ"></script>
-{{--    onsubmit="return checkForm()"--}}
-    <form action="{{ route('article.store' )}}" method="post" enctype="multipart/form-data" >
+    <form action="{{ route('article.store' )}}" method="post" enctype="multipart/form-data" onsubmit="return checkForm()">
         @csrf
         <input id="title" type="text" name="title" placeholder="제목"></p>
         <textarea name="description" id="editor1" rows="10" cols="80"></textarea>
@@ -14,7 +13,7 @@
             });
         </script>
         <select name="category" id="category">
-            <option value="0">- Select -</option>
+            <option value="">- Select -</option>
             @foreach($categories as $category)
                 <option value="{{$category -> id}}">{{$category -> name}}</option>
             @endforeach
@@ -48,11 +47,11 @@
     <script>
         var fileCount = 1;
         function add_attach_file() {
-            if($fileCount >= 5){
+            if(fileCount >= 5){
                 alert('파일은 총 5개까지 업로드 가능합니다.');
                 return false;
             }
-            $fileCount = $fileCount + 1;
+            fileCount = fileCount + 1;
             var file_attach = $('#file_attach').clone();
             file_attach.removeAttr('id').removeAttr('style');
             $('#add_button').before(file_attach);
@@ -72,7 +71,7 @@
                 editor.focus();
                 return false;
             }
-            if ($('#category').val() == '0') {
+            if ($('#category').val() == '') {
                 alert('카테고리를 선택하세요.');
                 $('#category').focus();
                 return false;
