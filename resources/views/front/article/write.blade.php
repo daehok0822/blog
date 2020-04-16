@@ -27,6 +27,15 @@
         <input type="hidden" id="g-recaptcha" name="g-recaptcha">
     </form>
 
+    @if ($errors->any())
+        <div class="alert alert-danger">
+            <ul>
+                @foreach ($errors->all() as $error)
+                    <li>{{ $error }}</li>
+                @endforeach
+            </ul>
+        </div>
+    @endif
     <script type="text/javascript">
         grecaptcha.ready(function() {
             grecaptcha.execute('6LdaW-kUAAAAABZ7-zrVak0baJp1e5-CSAUjRCeJ', {action: 'homepage'}).then(function(token) {

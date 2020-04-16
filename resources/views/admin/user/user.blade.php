@@ -4,7 +4,7 @@
 
 @section('content_header')
 @stop
-@section('content')
+
 
 @section('js')
     <script>
@@ -99,6 +99,8 @@
     </script>
 @endsection
 
+
+@section('content')
     <a href="{{route('admin.user.excel')}}">엑셀로 다운로드</a>
 
 <a id="addButton" type="button" class="btn btn-block btn-default">추가</a>
@@ -158,5 +160,13 @@
         <input type="submit" value="전송">
     </form>
 
-
+@if ($errors->any())
+    <div class="alert alert-danger">
+        <ul>
+            @foreach ($errors->all() as $error)
+                <li>{{ $error }}</li>
+            @endforeach
+        </ul>
+    </div>
+@endif
 @endsection
