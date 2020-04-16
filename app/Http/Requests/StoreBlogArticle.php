@@ -26,7 +26,7 @@ class StoreBlogArticle extends FormRequest
         return [
             'title' => 'required|max:30',
             'description' => 'required|max:1000',
-            'category_id' => 'required'
+            'category' => 'required'
         ];
     }
     public function messages()
