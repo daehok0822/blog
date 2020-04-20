@@ -115,14 +115,10 @@ class FrontArticleController extends Controller
             $join->on('articles.id', '=', 'thumbnail_image.article_id');
         });
 
-        //$articleObj = Article::with(['user']);
 
         $categories = Category::all();
         if (!empty($searchWord)) {
             $articleObj->articleSearch($searchWord);
-        }else{
-            abort(400, '검색어를 입력해 주세요');
-            return view('front.index');
         }
         if (!empty($category_id)) {
             $articleObj->where('category_id', $category_id);
@@ -251,10 +247,14 @@ class FrontArticleController extends Controller
                     }
                     ModelImage::create($imageInfo);
 
+                    $description = str_replace($image_path, $desc_img_path, $contents); //본문 크기 이미지로 대체
+                    $article->description = $description;
+                    $contents = $description;
+                    $article->update();
+
+
                 }
-                $description = str_replace($image_path, $desc_img_path, $contents); //본문 크기 이미지로 대체
-                $article->description = $description;
-                $article->update();
+
 
 
         }
@@ -287,7 +287,9 @@ class FrontArticleController extends Controller
      */
     public function edit($id)
     {
-        //
+        $article = Article::findOrFail($id);
+        $categories = Category::all();
+        return view('front.article.modify', compact('article','categories'));
     }
 
     /**
@@ -299,7 +301,12 @@ class FrontArticleController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $article = Article::find($id);
+        $article->title = $request->input('title');
+        $article->description = $request->input('description');
+        $article->category_id = $request->input('category');
+        $article->update();
+        return Redirect::route('front.index');
     }
 
     /**
@@ -310,7 +317,9 @@ class FrontArticleController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $article = Article::find($id);
+        $article->delete();
+        return Redirect::route('front.index');
     }
     public function fileDownload($id)
     {

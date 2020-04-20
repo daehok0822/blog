@@ -29,7 +29,7 @@ class AdminArticleController extends Controller
         $articles = $articleObj->orderBy('id', 'DESC')->paginate(20);
 
 
-        return view('admin.article.list', compact('articles'));
+        return view('admin.home', compact('articles'));
     }
 
     /**

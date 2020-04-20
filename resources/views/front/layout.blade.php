@@ -194,17 +194,11 @@
     </div>
 
     <div id="search_bar">
-        <form action="{{ route('front.index' )}}" method="get" >
-            <input style="border: 0" type="text" name="searchWord" id="searchWord" placeholder="검색">
-{{--            <button type="submit" class="btn btn-default"><i class="fa fa-search"></i><img src="https://www.codingfactory.net/wp-content/uploads/button_search.png"></button>--}}
-            <button style="border: 0"><i class="fa fa-search"></i></button>
+        <form action="{{ route('front.index' )}}" method="get" onsubmit="return checkForm()">
+            <input id="searchWord" style="border: 0" type="text" name="searchWord"  placeholder="검색">
+            <button id="searchButton" style="border: 0"><i class="fa fa-search"></i></button>
         </form>
     </div>
-
-
-
-
-
 </div>
 
 
@@ -220,8 +214,13 @@
         @yield('articles')
     </div>
 </div>
-
-
-
 </body>
 </html>
+<script>
+        function checkForm() {
+            if($('#searchWord').val()=='') {
+                alert('검색어를 입력해 주세요');
+                return false;
+            }
+        }
+</script>

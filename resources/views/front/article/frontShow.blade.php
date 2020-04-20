@@ -11,36 +11,29 @@
     </ul>
     @include('front.article.comment')
 
-@foreach($images as $key => $image)
-    {{$key}}
-    <div id="Pop_{{$key}}" class="popup" style="position:absolute; left:50px; top:50px; width:100px; height:100px; z-index:1;">
-        <button type="button" >
+    <div id="popup" style="display:none; position:absolute; left:50px; top:50px; width:100px; height:100px; z-index:1;">
+        <button id="xbutton" type="button">
             X
         </button>
-        <img id='popup_original_image_{{$key}}' src="">
+        <img id="layer" src="">
     </div>
-@endforeach
-
 
     <script>
-        $('.popup').hide();
-        var images = <?=json_encode($images)?>; //php함수를 자바스크립트에서 사용하기 위해
-        var app_url = '<?= env('APP_URL') ?>'; //blog.test
+
         $(document).ready(function () {
+            $('#articles img').click(function () {
+                var src = $(this).attr('src');
 
-            for (var i = 0; i < images.length; i++) {
-
-                $('#popup_original_image_' + i).attr('src', app_url + '/' + images[i].original_image);
-
-                $(document).on('click', '#popup_original_image_' + i, function () { //사진을 클릭하면 팝업되고
-                    $('#Pop_' + i).show();
-                });
-                $(document).on('click', 'button', function () { //x버튼을 누르면 꺼진다
-                    $('#Pop_' + i).hide();
-                });
-
-
-            }
+                var ext = src.substr(src.lastIndexOf('.') + 1);
+                var filename = src.split('.').slice(0, -1).join('.');
+                var original_image =  filename + '.' + ext ;
+                console.log(original_image);
+                 $('#layer').attr('src', original_image); //따옴표 없어서 에러난 거
+                $('#popup').show();
+            });
+            $('#xbutton').click(function () {
+                $('#popup').hide();
+            });
         });
     </script>
 

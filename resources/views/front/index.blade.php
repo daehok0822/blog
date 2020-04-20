@@ -17,6 +17,7 @@
         @foreach($articles as $key => $article)
             <tr role="row" class="odd">
                 <td>
+
                     @if(!empty($article->thumbnail_image))
 
                         <img src="{{$article->thumbnail_image}}" style="width:50px;">
@@ -34,8 +35,8 @@
                 <td>{{$article->user->name}}</td>
                 <td>{{$article->created_at}}</td>
                 <td>
-                        <a class="btn btn-block btn-default">수정</a>
-                        <a class="btn btn-block btn-default">삭제</a>
+                        <a href="{{ route('article.edit', ['article' => $article])}}" class="btn btn-block btn-default">수정</a>
+                        <a href="{{ route('article.destroy', ['article' => $article])}}" class="btn btn-block btn-default">삭제</a>
                 </td>
             </tr>
         @endforeach
