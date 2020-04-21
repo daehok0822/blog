@@ -6,6 +6,8 @@ use App\Article;
 use App\Category;
 use App\Comment;
 use App\Http\Requests\StoreBlogArticle;
+use App\Http\Requests\StoreBlogArticleModify;
+use App\Http\Requests\StoreBlogArticleDelete;
 use App\Image as ModelImage;
 use App\File;
 use Illuminate\Http\Request;
@@ -102,8 +104,9 @@ class FrontArticleController extends Controller
     private $allowed_ext = ['doc', 'docx', 'png', 'pdf', 'jpg', 'jpeg', 'gif', 'hwp', 'ppt', 'pptx', 'xls', 'xlsx'];
     public function __construct()
     {
-        $this->middleware('auth', ['only' => ['create']]);
+        $this->middleware('auth', ['only' => ['create', 'edit']]);
     }
+
 
     public function index(Request $request)
     {
@@ -136,11 +139,8 @@ class FrontArticleController extends Controller
      */
     public function create()
     {
-
         $categories = Category::all();
         return view('front.article.write', compact('categories'));
-
-
     }
 
     /**
@@ -299,12 +299,14 @@ class FrontArticleController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(StoreBlogArticleModify $request, $id)
     {
+        $validated = $request->validated();
         $article = Article::find($id);
         $article->title = $request->input('title');
         $article->description = $request->input('description');
         $article->category_id = $request->input('category');
+        var_dump($request->input('title'));
         $article->update();
         return Redirect::route('front.index');
     }
@@ -315,15 +317,21 @@ class FrontArticleController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(StoreBlogArticleDelete $request, $id)
     {
+        $validated = $request->validated();
         $article = Article::find($id);
         $article->delete();
-        return Redirect::route('front.index');
+        return response()->json([
+            'result' => 'success',
+        ]);
     }
+
+
     public function fileDownload($id)
     {
         $file = File::findOrFail($id);
         return Storage::download($file->name, $file->original_name);
+
     }
 }

@@ -2,8 +2,9 @@
 @section('articles')
     <script src="https://cdn.ckeditor.com/4.14.0/standard/ckeditor.js"></script>
     <script src="https://www.google.com/recaptcha/api.js?render=6LdaW-kUAAAAABZ7-zrVak0baJp1e5-CSAUjRCeJ"></script>
-    <form action="{{ route('article.store' )}}" method="post" enctype="multipart/form-data" onsubmit="return checkForm()">
+    <form action="{{ route('article.update', ['article' => $article])}}" enctype="multipart/form-data" onsubmit="return checkFormM()" method="post">
         @csrf
+        <input type="hidden" name="_method" value="PUT">
         <input id="title" type="text" name="title" placeholder="제목" value="{{$article->title}}"></p>
         <textarea name="description" id="editor1" rows="10" cols="80">{{$article->description}}</textarea>
         <script>
@@ -63,7 +64,7 @@
     </script>
 
     <script>
-        function checkForm() {
+        function checkFormM() {
             if($('#title').val() == ''){
                 alert('제목을 입력하세요.');
                 $('#title').focus();

@@ -194,7 +194,7 @@
     </div>
 
     <div id="search_bar">
-        <form action="{{ route('front.index' )}}" method="get" onsubmit="return checkForm()">
+        <form action="{{ route('front.index' )}}" method="get" onsubmit="return checkFormS()">
             <input id="searchWord" style="border: 0" type="text" name="searchWord"  placeholder="검색">
             <button id="searchButton" style="border: 0"><i class="fa fa-search"></i></button>
         </form>
@@ -216,11 +216,13 @@
 </div>
 </body>
 </html>
+
 <script>
-        function checkForm() {
+        function checkFormS() {
             if($('#searchWord').val()=='') {
                 alert('검색어를 입력해 주세요');
                 return false;
             }
         }
+
 </script>

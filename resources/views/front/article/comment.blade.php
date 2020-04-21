@@ -53,7 +53,7 @@
     });
 </script>
 <script>
-    function checkForm() {
+    function checkFormC() {
         if($('#nickname').val() == ''){
             alert('닉네임을 입력하세요.');
             $('#nickname').focus();
@@ -73,7 +73,7 @@
     }
 </script>
 
-<form role="form" action="{{ route('comment.store')}}" method="post" onsubmit="return checkForm()">
+<form role="form" action="{{ route('comment.store')}}" method="post" onsubmit="return checkFormC()">
     @csrf
     <input type="hidden" name="article_id" value="{{ $article->id }}">
     <div class="row">

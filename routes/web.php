@@ -32,6 +32,6 @@ Auth::routes();
 Route::get('/article/download/{id}', 'FrontArticleController@fileDownload')->name('front.filedown');
 Route::get('/', 'FrontArticleController@index')->name('front.index');
 Route::post('ckeditor/upload', 'CkeditorController@upload')->name('ckeditor.upload');
-Route::get('/view/{id}', 'FrontArticleController@show')->name('article.frontShow');
+
 
 

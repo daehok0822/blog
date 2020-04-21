@@ -2,9 +2,10 @@
 
 namespace App\Http\Requests;
 
+use App\Article;
 use Illuminate\Foundation\Http\FormRequest;
 
-class StoreBlogArticle extends FormRequest
+class StoreBlogArticleModify extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -13,7 +14,8 @@ class StoreBlogArticle extends FormRequest
      */
     public function authorize()
     {
-        return true;
+        $article = Article::find($this->route('article'));
+        return $article && $this->user()->can('edit', $article);
     }
 
     /**
@@ -31,6 +33,8 @@ class StoreBlogArticle extends FormRequest
     }
     public function messages()
     {
+
+
         return [
             'title.required' => '제목이 필요합니다',
             'description.required'  => '본문이 필요합니다',
