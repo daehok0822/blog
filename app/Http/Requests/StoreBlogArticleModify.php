@@ -15,7 +15,7 @@ class StoreBlogArticleModify extends FormRequest
     public function authorize()
     {
         $article = Article::find($this->route('article'));
-        return $article && $this->user()->can('edit', $article);
+        return $article && $this->user()->can('update', $article);
     }
 
     /**

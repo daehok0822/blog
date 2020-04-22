@@ -61,22 +61,25 @@
                     }, "json");
             })
         });
-        function checkForm() {
+        function checkFormU(mode) {
             if($('#name').val() == ''){
                 alert('이름을 입력하세요.');
                 $('#name').focus();
                 return false;
             }
-            if ($('#email')) {
+            if ($('#email').val() == '') {
                 alert('이메일을 입력하세요.');
                 ($('#email')).focus();
                 return false;
             }
-            if ($('#password').val() == '0') {
-                alert('비밀번호를 입력하세요.');
-                $('#password').focus();
-                return false;
+            if (mode == 'new') {
+                if ($('#password').val() == '') {
+                    alert('비밀번호를 입력하세요.');
+                    $('#password').focus();
+                    return false;
+                }
             }
+
             return true;
         }
         $("#add_form").hide();
@@ -106,7 +109,7 @@
 <a id="addButton" type="button" class="btn btn-block btn-default">추가</a>
 
 <form id="add_form" action="{{ route('user.store')}}"
-      method="post" onsubmit="return checkForm()">
+      method="post" onsubmit="return checkFormU('new')">
     @csrf
     <input  type="text" name="name" placeholder="이름" >
     <input  type="email" name="email" placeholder="이메일">
@@ -145,7 +148,7 @@
         </tbody>
     </table>
     <form id="modify_form" action="{{ route('user.update',['user' => $user])}}"
-          method="post"  onsubmit="return checkForm()">
+          method="post"  onsubmit="return checkFormU('modify')">
         @csrf
         <input type="hidden" name="_method" value="PUT">
         <input id="name" type="text" name="name" placeholder="이름" >

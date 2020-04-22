@@ -86,6 +86,7 @@ class UserController extends Controller
      */
     public function update(StoreBlogUser $request, $id)
     {
+
         $validated = $request->validated();
         $user = User::find($id);
         if(empty($request->input('name'))){

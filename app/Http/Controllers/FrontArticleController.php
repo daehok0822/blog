@@ -285,7 +285,7 @@ class FrontArticleController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(Request $request,$id)
     {
         $article = Article::findOrFail($id);
         $categories = Category::all();
@@ -301,12 +301,11 @@ class FrontArticleController extends Controller
      */
     public function update(StoreBlogArticleModify $request, $id)
     {
-        $validated = $request->validated();
+
         $article = Article::find($id);
         $article->title = $request->input('title');
         $article->description = $request->input('description');
         $article->category_id = $request->input('category');
-        var_dump($request->input('title'));
         $article->update();
         return Redirect::route('front.index');
     }
@@ -322,9 +321,7 @@ class FrontArticleController extends Controller
         $validated = $request->validated();
         $article = Article::find($id);
         $article->delete();
-        return response()->json([
-            'result' => 'success',
-        ]);
+        return Redirect::route('front.index');
     }
 
 
