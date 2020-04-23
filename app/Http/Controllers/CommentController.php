@@ -48,7 +48,7 @@ class CommentController extends Controller
             'article_id' => $request->input('article_id'),
         ];
         Comment::create($commentInfo);
-        return Redirect::route('article.frontShow',['id'=>$request->input('article_id')]);
+        return Redirect::route('article.show',['article'=>$request->input('article_id')]);
 
 
 

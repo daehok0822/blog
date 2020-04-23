@@ -20,7 +20,6 @@
                 $( 'input#name' ).val( user_name );
                 $( 'input#email' ).val( user_email );
 
-
                 $("#modify_form").show();
             });
 
@@ -62,24 +61,23 @@
             })
         });
         function checkFormU(mode) {
-            if($('#name').val() == ''){
+            if($('#' + mode + '_name').val() == ''){
                 alert('이름을 입력하세요.');
                 $('#name').focus();
                 return false;
             }
-            if ($('#email').val() == '') {
+            if($('#' + mode + '_email').val() == ''){
                 alert('이메일을 입력하세요.');
                 ($('#email')).focus();
                 return false;
             }
             if (mode == 'new') {
-                if ($('#password').val() == '') {
+                if($('#new_password').val() == ''){
                     alert('비밀번호를 입력하세요.');
                     $('#password').focus();
                     return false;
                 }
             }
-
             return true;
         }
         $("#add_form").hide();
@@ -111,9 +109,9 @@
 <form id="add_form" action="{{ route('user.store')}}"
       method="post" onsubmit="return checkFormU('new')">
     @csrf
-    <input  type="text" name="name" placeholder="이름" >
-    <input  type="email" name="email" placeholder="이메일">
-    <input  type="password" name="password" placeholder="비밀번호">
+    <input id="new_name"  type="text" name="name" placeholder="이름" >
+    <input id="new_email"  type="email" name="email" placeholder="이메일">
+    <input id="new_password" type="password" name="password" placeholder="비밀번호">
     <p><input type="submit" value="추가"></p>
 </form>
 
@@ -147,13 +145,14 @@
         @endforeach
         </tbody>
     </table>
+
     <form id="modify_form" action="{{ route('user.update',['user' => $user])}}"
           method="post"  onsubmit="return checkFormU('modify')">
         @csrf
         <input type="hidden" name="_method" value="PUT">
-        <input id="name" type="text" name="name" placeholder="이름" >
-        <input id="email" type="email" name="email" placeholder="이메일">
-        <input id="password" type="password" name="password" placeholder="비밀번호">
+        <input id="modify_name" type="text" name="name" placeholder="이름" >
+        <input id="modify_email" type="email" name="email" placeholder="이메일">
+        <input id="modify_password" type="password" name="password" placeholder="비밀번호">
         <p><input type="submit" name="수정"></p>
     </form>
 

@@ -26,7 +26,6 @@
             var url = $(this).attr('action');
             $.post(url, $(this).serialize(),
                 function (data) {
-                    // $('#comment_description_' + data.id).text(data.description);
                     $('#comment_description_' + data.id).text(des);
                     $("#modify_form_" + data.id).hide();
                     if(data.result=='실패'){
@@ -53,36 +52,38 @@
     });
 </script>
 <script>
-    function checkFormC() {
-        if($('#nickname').val() == ''){
-            alert('닉네임을 입력하세요.');
-            $('#nickname').focus();
-            return false;
+    function checkFormC(mode) {
+        if(mode == 'new'){
+            if($('#new_nickname').val() == ''){
+                alert('닉네임을 입력하세요.');
+                $('#new_nickname').focus();
+                return false;
+            }
         }
-        if ($('#text').val() == '') {
+        if($('#' + mode + '_des').val() == ''){
             alert('내용을 입력하세요.');
-            $('#text').focus();
+            $('#' + mode + '_des').focus();
             return false;
         }
-        if ($('#password').val() == '') {
+        if($('#' + mode + '_password').val() == ''){
             alert('비밀번호를 입력하세요.');
-            $('#password').focus();
+            $('#' + mode + '_password').focus();
             return false;
         }
         return true;
     }
 </script>
 
-<form role="form" action="{{ route('comment.store')}}" method="post" onsubmit="return checkFormC()">
+<form role="form" action="{{ route('comment.store')}}" method="post" onsubmit="return checkFormC('new')">
     @csrf
     <input type="hidden" name="article_id" value="{{ $article->id }}">
     <div class="row">
         <div class="form-group col-xs-3">
-            <input id="nickname" type="text" name="nickname" class="form-control" placeholder="닉네임">
-            <input id="password" type="text" name="password" class="form-control" placeholder="비밀번호">
+            <input id="new_nickname" type="text" name="nickname" class="form-control" placeholder="닉네임">
+            <input id="new_password" type="text" name="password" class="form-control" placeholder="비밀번호">
         </div>
         <div class="form-group col-xs-5">
-            <textarea id="text" class="form-control" rows="3" name="description" placeholder="Enter ..."></textarea>
+            <textarea id="new_des" class="form-control" rows="3" name="description" placeholder="Enter ..."></textarea>
             <input class="fa-pull-right" type="submit" name="댓글쓰기">
         </div>
     </div>
@@ -106,15 +107,17 @@
                 </tbody>
             </table>
 
-            <form id="modify_form_{{ $comment->id }}" class="modify_form" action="{{ route('comment.update',['comment' => $comment])}}" method="post" onsubmit="return checkForm()">
+            <form id="modify_form_{{ $comment->id }}" class="modify_form" action="{{ route('comment.update',['comment' => $comment])}}" method="post" onsubmit="return checkFormC('modify')">
                 @csrf
                 <input type="hidden" name="_method" value="PUT">
                 <input type="hidden" name="article_id" value="{{ $article->id }}">
-                <input type="text" name="password" placeholder="비밀번호"></p>
-                <p><textarea name="description">{{$comment->description}}</textarea></p>
+
+                <input id="modify_password" type="text" name="password" placeholder="비밀번호"></p>
+                <p><textarea id="modify_des" name="description">{{$comment->description}}</textarea></p>
 
                 <p><input type="submit" name="수정"></p>
             </form>
+
             <form id="delete_form_{{ $comment->id }}" class="delete_form" action="{{ route('comment.destroy', ['comment' => $comment] )}}" method="post">
                 @csrf
                 @method('DELETE')
