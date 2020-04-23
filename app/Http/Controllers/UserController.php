@@ -46,7 +46,7 @@ class UserController extends Controller
         $userInfo =[
             'name' => $request->input('name'),
             'email' => $request->input('email'),
-            'password' => $request->input('password'),
+            'password' => 'required_with:id|max:15',
             'isAdmin' => true
         ];
         $user = User::create($userInfo);

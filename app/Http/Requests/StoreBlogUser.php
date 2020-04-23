@@ -24,40 +24,22 @@ class StoreBlogUser extends FormRequest
     public function rules()
     {
 
-        if(!empty($id)){
-            return [
-                'name' => 'required|max:15',
-                'email' => 'required',
-            ];
-        }else{
-            return [
-                'name' => 'required|max:15',
-                'email' => 'required',
-                'password' => 'required|max:15'
-            ];
-        }
+        return [
+            'name' => 'required|max:15',
+            'email' => 'required',
+            'password' => 'required_unless:_method,PUT|max:15'
+        ];
 
     }
     public function messages()
     {
-        if(!empty($id)){
-            return [
-                'name.required' => '이름이 필요합니다',
-                'email.required'  => '이메일이 필요합니다',
-                'name.max:15' => '이름은 15자를 넘을 수 없습니다',
-                'password.max:15' => '비번은 15자를 넘을 수 없습니다'
+        return [
+            'name.required' => '이름이 필요합니다',
+            'email.required'  => '이메일이 필요합니다',
+            'password.required' => '비밀번호가 필요합니다',
+            'name.max:15' => '이름은 15자를 넘을 수 없습니다',
+            'password.max:15' => '비번은 15자를 넘을 수 없습니다'
 
-            ];
-        }else{
-            return [
-                'name.required' => '이름이 필요합니다',
-                'email.required'  => '이메일이 필요합니다',
-                'password.required' => '비밀번호가 필요합니다',
-                'name.max:15' => '이름은 15자를 넘을 수 없습니다',
-                'password.max:15' => '비번은 15자를 넘을 수 없습니다'
-
-            ];
-        }
-
+        ];
     }
 }
